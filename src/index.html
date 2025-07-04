@@ -40,17 +40,18 @@
         </section>
       </main>
     
-      <section id="add-movie">
-        <h2>Añadir nueva película</h2>
-        <form id="movie-form">
-          <input type="text" name="title" placeholder="Título" required />
-          <input type="text" name="director" placeholder="Director" required />
-          <input type="number" name="release_year" placeholder="Año" required />
-          <input type="text" name="genre" placeholder="Género" required />
-          <textarea name="movie_description" placeholder="Descripción" required></textarea>
-          <input type="url" name="poster_url" placeholder="URL del póster" />
-          <input type="url" name="trailer_url" placeholder="URL del tráiler" />
-          <button type="submit">Añadir película</button>
+      <section id="movie-form-container">
+        <button id="toggle-form">➕ Añadir nueva película</button>
+      
+        <form id="movie-form" class="hidden">
+          <input type="text" name="title" placeholder="Título de la película" required />
+          <input type="text" name="director" placeholder="Director" />
+          <input type="number" name="release_year" placeholder="Año de estreno" />
+          <input type="text" name="genre" placeholder="Género" />
+          <textarea name="movie_description" placeholder="Descripción"></textarea>
+          <input type="text" name="poster_url" placeholder="URL del póster" />
+          <input type="text" name="trailer_url" placeholder="URL del tráiler" />
+          <button type="submit">🎬 Guardar película</button>
         </form>
       </section>
     

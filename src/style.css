@@ -58,40 +58,56 @@
 
   /*forms*/
 
+  #movie-form-container {
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 600px;
+  }
+  
+  #toggle-form {
+    background-color: #ffcc70;
+    color: #401a49;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 10px #ffcc70;
+    transition: background 0.3s;
+  }
+  
+  #toggle-form:hover {
+    background-color: #ffc048;
+  }
+  
   #movie-form {
+    margin-top: 1rem;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(5px);
-    border-radius: 15px;
     padding: 2rem;
-    margin: 2rem;
-    color: #fff;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    display: none;
+    text-align: left;
   }
   
-  #movie-form input,
-  #movie-form textarea,
-  #movie-form select,
-  #movie-form button {
-    width: 100%;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 1rem;
+  #movie-form.show {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
   }
   
-  #movie-form button {
-    background-color: #ff5e62;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scaleY(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
   }
   
-  #movie-form button:hover {
-    background-color: #ff9966;
-    box-shadow: 0 0 10px #ff9966;
-  }
   
   
   
