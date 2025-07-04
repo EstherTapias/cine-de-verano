@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎞Cinde de Verano🌅🌊</title>
+</head>
+<body>
+    <header>
+        <h1>🎬 Cine de Verano</h1>
+        <p>Películas para sentir, pensar... y olvidarnos del calor 😅</p>
+      </header>
+    
+      <nav id="genre-filters">
+        <button data-genre="all">Todos</button>
+        <button data-genre="Drama">Drama</button>
+        <button data-genre="Thriller">Thriller</button>
+        <button data-genre="Science Fiction">Ciencia Ficción</button>
+        <button data-genre="Psychological Thriller">Psicológico</button>
+      </nav>
+    
+      <main>
+        <section id="movie-list">
+          <!-- Aquí se insertarán dinámicamente las películas -->
+        </section>
+      </main>
+    
+      <section id="add-movie">
+        <h2>Añadir nueva película</h2>
+        <form id="movie-form">
+          <input type="text" name="title" placeholder="Título" required />
+          <input type="text" name="director" placeholder="Director" required />
+          <input type="number" name="release_year" placeholder="Año" required />
+          <input type="text" name="genre" placeholder="Género" required />
+          <textarea name="movie_description" placeholder="Descripción" required></textarea>
+          <input type="url" name="poster_url" placeholder="URL del póster" />
+          <input type="url" name="trailer_url" placeholder="URL del tráiler" />
+          <button type="submit">Añadir película</button>
+        </form>
+      </section>
+    
+      <footer>
+        <p>© 2025 Cine de Verano • Proyecto educativo</p>
+      </footer>
+    <script src="services.js"></script>
+</body>
+</html>
