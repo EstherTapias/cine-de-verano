@@ -1,14 +1,26 @@
-/* Fondo base */
+/* Reseteo y box-sizing global para evitar desplazamientos */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* Fondo base animado */
 .background-scene {
     position: fixed;
     top: 0; left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(to bottom, #ff9966, #ff5e62, #5f2c82);
+    background: linear-gradient(to bottom, #ffa17f, #f8a5c2, #845ec2);
+    transition: background 2s ease;
     overflow: hidden;
     z-index: -1;
   }
-
+  
+  /* Animación de cielo dinámico */
+  .sky-evening {
+    background: linear-gradient(to bottom, #ff9a9e, #fad0c4, #fad0c4);
+  }
+  
   header {
     padding: 2rem 1rem;
     text-align: center;
@@ -45,8 +57,8 @@
     color: #401a49;
     box-shadow: 0 0 10px #ffcc70;
   }
-
-  /*Seccion pelis*/
+  
+  /* Lista de películas */
   #movie-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -55,15 +67,17 @@
     margin-top: 2rem;
     color: #ffffff;
   }
-
-  /*forms*/
-
+  
+  /* CONTENEDOR DE FORMULARIO */
   #movie-form-container {
     text-align: center;
     margin: 2rem auto;
     max-width: 600px;
+    /* Añadimos padding-bottom para que el form no quede pegado al footer */
+    padding-bottom: 6rem;
   }
   
+  /* Botón para desplegar el formulario */
   #toggle-form {
     background-color: #ffcc70;
     color: #401a49;
@@ -81,15 +95,47 @@
     background-color: #ffc048;
   }
   
+  /* FORMULARIO */
   #movie-form {
     margin-top: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(6px);
     padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     display: none;
     text-align: left;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    /* Añadimos margin-bottom para separación extra con el footer */
+    margin-bottom: 3rem;
+  }
+  
+  #movie-form input,
+  #movie-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border: none;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  
+  #movie-form input::placeholder,
+  #movie-form textarea::placeholder {
+    color: #eee;
+  }
+  
+  #movie-form button[type="submit"] {
+    background-color: #ffcc70;
+    color: #401a49;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 20px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
   }
   
   #movie-form.show {
@@ -108,19 +154,19 @@
     }
   }
   
-  
-  
-  
-  
-  /* Sol estilo retro: líneas horizontales */
+  /* 🌅 Sol con líneas y reflejo */
   .sun-wrapper {
     position: absolute;
-    bottom: 25vh; /* justo donde empieza el mar */
-    left: 50%;
+    bottom: 25vh;
+    left: 50vw;
+    
+    /* Para centrar el sol exactamente */
     transform: translateX(-50%);
     width: 200px;
     height: 100px;
     overflow: visible;
+    /* Añadimos z-index para que esté por encima del fondo */
+    z-index: 1;
   }
   
   .sun {
@@ -137,77 +183,84 @@
     );
     box-shadow: 0 0 60px rgba(255, 212, 59, 0.4);
     backdrop-filter: blur(2px);
+    animation: sunset 20s infinite alternate ease-in-out;
+    position: relative;
   }
   
-  /* Reflejo del sol */
-  .sun-reflection {
-    width: 200px;
-    height: 100px;
-    border-bottom-left-radius: 100px;
-    border-bottom-right-radius: 100px;
-    margin-top: -4px; /* que quede pegado */
-    background: repeating-linear-gradient(
-      to top,
-      rgba(255, 224, 102, 0.1),
-      rgba(255, 224, 102, 0.1) 8px,
-      transparent 8px,
-      transparent 16px
-    );
-    transform: scaleY(-1);
-    opacity: 0.3;
-    filter: blur(3px);
+
+  
+  @keyframes wave {
+    0%, 100% {
+      transform: translateX(-50%) scaleY(-1) scaleX(1);
+    }
+    50% {
+      transform: translateX(-50%) scaleY(-1) scaleX(1.05);
+    }
   }
   
+  /* 🌇 Movimiento descendente del sol */
+  @keyframes sunset {
+    from {
+      transform: translateX(-50%) translateY(0);
+    }
+    to {
+      transform: translateX(-50%) translateY(20px);
+    }
+  }
   
-  /* Océano */
   .ocean {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 25vh;
-    background: linear-gradient(to top, #0096c7, transparent);
+    background: linear-gradient(to top, #00b4d8, transparent);
   }
-  
   
   /* Gaviotas estilizadas */
   .seagull {
     position: absolute;
+    width: 3rem;
+    height: 3rem;
+    background: transparent;
+    color: white;
     font-size: 3rem;
-    color: rgba(255, 255, 255, 0.6);
-    opacity: 0.6;
+    opacity: 0.5;
     animation: fly 12s linear infinite;
-    transform: rotate(15deg);
   }
   
   .seagull-1 {
-    top: 18%;
+    top: 15%;
     left: -10%;
     animation-delay: 0s;
   }
   
   .seagull-2 {
-    top: 26%;
+    top: 20%;
     left: -20%;
     animation-delay: 4s;
   }
-
-  footer {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 1.5rem;
-    text-align: center;
-    color: #fff;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 3rem;
-  }
-  
   
   @keyframes fly {
-    0% { transform: translateX(0) rotate(15deg); }
-    50% { transform: translateX(50vw) translateY(-10px) rotate(10deg); }
-    100% { transform: translateX(120vw) translateY(0) rotate(15deg); }
+    0% { transform: translateX(0); }
+    50% { transform: translateX(50vw) translateY(-10px); }
+    100% { transform: translateX(120vw); }
   }
   
+  /* Footer fijo */
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 0.5rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6); /* Más opaco para eliminar líneas blancas */
+    color: white;
+    font-size: 0.9rem;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+    font-family: 'Orbitron', sans-serif;
+    border-top: none; /* Eliminamos bordes que pueden generar líneas */
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.7); /* Sutil sombra para mejor transición */
+  }
   
