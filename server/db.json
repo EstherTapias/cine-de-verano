@@ -75,6 +75,63 @@
             "duration": 113,
             "language": "English",
             "country": "USA"
+        },
+        {
+          "id": "5",
+          "title": "Memento",
+          "director": "Christopher Nolan",
+          "movie_description": "Un hombre con pérdida de memoria a corto plazo intenta encontrar al asesino de su esposa mientras reconstruye su vida a través de notas y tatuajes.",
+          "release_year": 2000,
+          "genre": "Psychological Thriller / Mystery",
+          "rating": 8.4,
+          "cast": [
+            "Guy Pearce",
+            "Carrie-Anne Moss",
+            "Joe Pantoliano"
+          ],
+          "poster_url": "https://upload.wikimedia.org/wikipedia/en/c/c7/Memento_poster.jpg",
+          "trailer_url": "https://www.youtube.com/watch?v=0vS0E9bBSL0",
+          "duration": 113,
+          "language": "English",
+          "country": "USA"
+        },
+        {
+          "id": "6",
+          "title": "Tesis",
+          "director": "Alejandro Amenábar",
+          "movie_description": "Una estudiante de cine se adentra en una peligrosa investigación sobre el cine snuff y descubre secretos oscuros en su universidad.",
+          "release_year": 1996,
+          "genre": "Thriller / Horror / Mystery",
+          "rating": 7.4,
+          "cast": [
+            "Ana Torrent",
+            "Fele Martínez",
+            "Eduardo Noriega"
+          ],
+          "poster_url": "https://upload.wikimedia.org/wikipedia/en/7/7e/Tesis_movie.jpg",
+          "trailer_url": "https://www.youtube.com/watch?v=gNMFpzFVfRQ",
+          "duration": 125,
+          "language": "Spanish",
+          "country": "Spain"
+        },
+        {
+          "id": "7",
+          "title": "Black Swan",
+          "director": "Darren Aronofsky",
+          "movie_description": "Una bailarina de ballet lucha con la presión del papel principal y su propia salud mental en una espiral hacia la obsesión y la locura.",
+          "release_year": 2010,
+          "genre": "Psychological Thriller / Drama",
+          "rating": 8.0,
+          "cast": [
+            "Natalie Portman",
+            "Mila Kunis",
+            "Vincent Cassel"
+          ],
+          "poster_url": "https://upload.wikimedia.org/wikipedia/en/6/68/Black_Swan_poster.jpg",
+          "trailer_url": "https://www.youtube.com/watch?v=5jaI1XOB-bs",
+          "duration": 108,
+          "language": "English",
+          "country": "USA"
         }
     ]
 }
