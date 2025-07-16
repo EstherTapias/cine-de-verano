@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>🎞Cine de Verano🌅🌊</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <!-- Fuente Orbitron para el tema futurista -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
     <!-- Encabezado principal con título y descripción -->
     <header>
         <h1>🎬 Cine de Verano 🌅🌊</h1>
-        <p>Películas para sentir, pensar... y olvidarnos del calor</p>
+        <p id="header-desc">Películas para sentir, pensar... y olvidarnos del calor</p>
+        <!-- El botón Cambiar cielo se inserta aquí automáticamente vía JS -->
     </header>
-
+    
     <!-- Navegación con filtros de géneros -->
-    <nav id="genre-filters">
+    <nav class="genre-filters" id="genre-filters">
         <button data-genre="all">Todos</button>
         <button data-genre="Drama">Drama</button>
         <button data-genre="Thriller">Thriller</button>
@@ -26,14 +27,11 @@
 
     <!-- Escena de fondo animada con sol, océano y gaviotas -->
     <div class="background-scene">
-        <!-- Contenedor del sol con reflejo -->
         <div class="sun-wrapper">
             <div class="sun" id="sun"></div>
             <div class="sun-reflection"></div>
         </div>
-        <!-- Océano en la parte inferior -->
         <div class="ocean"></div>
-        <!-- Gaviotas volando con iconos personalizados -->
         <div class="seagull seagull-1"></div>
         <div class="seagull seagull-2"></div>
         <div class="seagull seagull-3"></div>
@@ -49,7 +47,6 @@
     <!-- Sección del formulario para añadir nuevas películas -->
     <section id="movie-form-container">
         <button id="toggle-form">➕ Añadir nueva película</button>
-
         <form id="movie-form" class="hidden">
             <input type="text" name="title" placeholder="Título de la película" required />
             <input type="text" name="director" placeholder="Director" />
