@@ -1,3 +1,25 @@
+import { getMovies } from './services.js';
+
+// Cuando el DOM esté cargado, ejecutamos la función principal
+document.addEventListener('DOMContentLoaded', () => {
+  mostrarPeliculas();
+  // Aquí puedes llamar también otras funciones como setup de filtros o formulario si las tienes
+});
+
+// Función que pide las pelis al backend y las muestra
+async function mostrarPeliculas() {
+  try {
+    const movies = await getMovies();
+    pintarPeliculas(movies); // Usa tu propia función para mostrarlas
+  } catch (error) {
+    console.error('Error al cargar las películas:', error);
+    const contenedor = document.getElementById('movie-list');
+    contenedor.innerHTML = '<p>Error al cargar las películas. Inténtalo más tarde.</p>';
+  }
+}
+
+
+
 // ========================================
 // CONFIGURACIÓN INICIAL Y VARIABLES
 // ========================================
