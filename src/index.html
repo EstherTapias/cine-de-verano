@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎞Cinde de Verano🌅🌊</title>
+    <title>🎞Cine de Verano🌅🌊</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Fuente Orbitron para el tema futurista -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Encabezado principal con título y descripción -->
     <header>
         <h1>🎬 Cine de Verano 🌅🌊</h1>
-        <p>Películas para sentir, pensar... y olvidarnos del calor </p>
+        <p>Películas para sentir, pensar... y olvidarnos del calor</p>
     </header>
 
+    <!-- Navegación con filtros de géneros -->
     <nav id="genre-filters">
         <button data-genre="all">Todos</button>
         <button data-genre="Drama">Drama</button>
@@ -21,24 +24,29 @@
         <button data-genre="Psychological Thriller">Psicológico</button>
     </nav>
 
-    <!-- Fondo animado fijo detrás -->
+    <!-- Escena de fondo animada con sol, océano y gaviotas -->
     <div class="background-scene">
+        <!-- Contenedor del sol con reflejo -->
         <div class="sun-wrapper">
             <div class="sun" id="sun"></div>
             <div class="sun-reflection"></div>
         </div>
+        <!-- Océano en la parte inferior -->
         <div class="ocean"></div>
+        <!-- Gaviotas volando con iconos personalizados -->
         <div class="seagull seagull-1"></div>
         <div class="seagull seagull-2"></div>
         <div class="seagull seagull-3"></div>
     </div>
 
+    <!-- Contenido principal donde se muestran las películas -->
     <main>
         <section id="movie-list">
-          <!-- Aquí se insertarán dinámicamente las películas -->
+            <!-- Las películas se insertarán dinámicamente aquí -->
         </section>
     </main>
 
+    <!-- Sección del formulario para añadir nuevas películas -->
     <section id="movie-form-container">
         <button id="toggle-form">➕ Añadir nueva película</button>
 
@@ -54,10 +62,12 @@
         </form>
     </section>
 
+    <!-- Footer centrado correctamente -->
     <footer>
         <p>© 2025 Cine de Verano • Proyecto educativo</p>
     </footer>
 
+    <!-- Scripts JavaScript -->
     <script src="services.js"></script>
     <script src="main.js" defer></script>
 </body>
