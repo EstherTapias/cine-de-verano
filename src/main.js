@@ -1,22 +1,67 @@
+// main.js
+
+import { getMovies } from './services.js';
+
+// When the DOM loads, fetch and render movies and initialize the rest of the UI
+document.addEventListener('DOMContentLoaded', () => {
+    displayMovies();
+    initializeApp();
+    setTimeout(applyMobileAdjustments, 100);
+});
+
+// Fetches movies and draws them in the DOM
+async function displayMovies() {
+    try {
+        const movies = await getMovies();
+        console.log('Array of movies received:', movies); // Para depuración
+        renderMovies(movies);
+    } catch (error) {
+        console.error('Error al cargar las películas:', error);
+        const container = document.getElementById('movie-list');
+        container.innerHTML = '<p>Error al cargar las películas. Inténtalo más tarde.</p>';
+    }
+}
+
+// Renders movie cards in the container
+function renderMovies(movies) {
+    const container = document.getElementById('movie-list');
+    container.innerHTML = '';
+
+    if (!movies.length) {
+        container.innerHTML = '<p>No hay películas disponibles</p>';
+        return;
+    }
+
+    movies.forEach(movie => {
+        const card = document.createElement('article');
+        card.classList.add('movie-card');
+
+        card.innerHTML = `
+            <img src="${movie.poster_url}" alt="Póster de ${movie.title}">
+            <h3>${movie.title}</h3>
+            <p><strong>Director:</strong> ${movie.director || 'Desconocido'}</p>
+            <p><strong>Año:</strong> ${movie.release_year || 'N/A'}</p>
+            <p><strong>Género:</strong> ${movie.genre || 'N/A'}</p>
+            <p>${movie.movie_description || ''}</p>
+            ${movie.trailer_url ? `<a href="${movie.trailer_url}" target="_blank">🎬 Ver tráiler</a>` : ''}
+        `;
+
+        container.appendChild(card);
+    });
+}
+
 // ========================================
-// CONFIGURACIÓN INICIAL Y VARIABLES
+// UI AND STATE SETUP (names in English, web/messages in Spanish)
 // ========================================
 
 const toggleFormButton = document.getElementById('toggle-form');
 const movieForm = document.getElementById('movie-form');
 const backgroundScene = document.querySelector('.background-scene');
-
-// Array de colores para el cambio dinámico del cielo
-const skyColors = [
-    '#ffa17f',
-    '#ff758c',
-    '#8559a5',
-    '#5f0a87'
-];
+const skyColors = ['#ffa17f', '#ff758c', '#8559a5', '#5f0a87'];
 let currentSkyIndex = 0;
 
 // ========================================
-// FUNCIONALIDAD DEL FORMULARIO
+// FORM TOGGLE LOGIC
 // ========================================
 
 function toggleMovieForm() {
@@ -25,23 +70,20 @@ function toggleMovieForm() {
         ? '❌ Cerrar formulario'
         : '➕ Añadir nueva película';
 }
-
 toggleFormButton.addEventListener('click', toggleMovieForm);
 
 // ========================================
-// CAMBIO DINÁMICO DEL CIELO
+// CHANGING SKY COLOR
 // ========================================
 
 function changeSkyColor() {
     currentSkyIndex = (currentSkyIndex + 1) % skyColors.length;
     const newGradient = `linear-gradient(to bottom, ${skyColors[currentSkyIndex]}, #845ec2)`;
     backgroundScene.style.background = newGradient;
-    console.log(`Cielo cambiado a: ${skyColors[currentSkyIndex]}`);
 }
 
 function createSkyToggleButton() {
     if (document.getElementById('sky-toggle-btn')) return;
-
     const skyToggleButton = document.createElement('button');
     skyToggleButton.textContent = '🎨 Cambiar cielo';
     skyToggleButton.id = 'sky-toggle-btn';
@@ -49,7 +91,7 @@ function createSkyToggleButton() {
 
     skyToggleButton.addEventListener('click', changeSkyColor);
 
-    // Insertamos justo después del <p> en el header
+    // Insert just after <p> in header
     const desc = document.getElementById('header-desc');
     if (desc && desc.parentNode) {
         desc.parentNode.insertBefore(skyToggleButton, desc.nextSibling);
@@ -57,7 +99,7 @@ function createSkyToggleButton() {
 }
 
 // ========================================
-// FUNCIONALIDAD DE FILTROS DE GÉNERO
+// GENRE FILTERS
 // ========================================
 
 function setupGenreFilters() {
@@ -74,11 +116,12 @@ function setupGenreFilters() {
 }
 
 function filterMoviesByGenre(genre) {
+    // Future filter logic if needed
     console.log(`Filtrando películas por género: ${genre}`);
 }
 
 // ========================================
-// MANEJO DEL FORMULARIO DE PELÍCULA
+// FORM SUBMISSION HANDLING
 // ========================================
 
 function handleMovieFormSubmit(event) {
@@ -88,11 +131,11 @@ function handleMovieFormSubmit(event) {
     const movieData = {
         title: formData.get('title'),
         director: formData.get('director'),
-        releaseYear: formData.get('release_year'),
+        release_year: formData.get('release_year'),
         genre: formData.get('genre'),
-        description: formData.get('movie_description'),
-        posterUrl: formData.get('poster_url'),
-        trailerUrl: formData.get('trailer_url')
+        movie_description: formData.get('movie_description'),
+        poster_url: formData.get('poster_url'),
+        trailer_url: formData.get('trailer_url')
     };
 
     if (!movieData.title.trim()) {
@@ -100,15 +143,20 @@ function handleMovieFormSubmit(event) {
         return;
     }
 
+    // Para depuración
     console.log('Nueva película añadida:', movieData);
 
-    // TODO: saveMovie(movieData);
+    // Aquí puedes hacer POST a la API si lo deseas
 
     movieForm.reset();
     movieForm.classList.remove('show');
     toggleFormButton.textContent = '➕ Añadir nueva película';
     showSuccessMessage('¡Película añadida correctamente!');
 }
+
+// ========================================
+// UI EFFECTS AND EXTRAS
+// ========================================
 
 function showSuccessMessage(message) {
     const successMessage = document.createElement('div');
@@ -133,10 +181,6 @@ function showSuccessMessage(message) {
         successMessage.remove();
     }, 3000);
 }
-
-// ========================================
-// EFECTOS VISUALES ADICIONALES
-// ========================================
 
 function addParallaxEffect() {
     const sun = document.getElementById('sun');
@@ -165,11 +209,10 @@ function addSeagullHoverEffect() {
 }
 
 // ========================================
-// INICIALIZACIÓN
+// INITIALIZATION
 // ========================================
 
 function initializeApp() {
-    console.log('Inicializando Cine de Verano...');
     setupGenreFilters();
     createSkyToggleButton();
     addParallaxEffect();
@@ -180,37 +223,12 @@ function initializeApp() {
 }
 
 // ========================================
-// EVENTOS DE CARGA
+// MOBILE ADJUSTMENTS
 // ========================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    initializeApp();
-    setTimeout(applyMobileAdjustments, 100);
-});
-
-// ========================================
-// FUNCIONES UTILITARIAS
-// ========================================
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
 
 function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
-
-// ========================================
-// AJUSTES PARA DISPOSITIVOS MÓVILES
-// ========================================
 
 function applyMobileAdjustments() {
     if (isMobileDevice()) {
