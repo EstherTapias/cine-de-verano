@@ -5,10 +5,9 @@ export async function getMovies() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const movies = await response.json();
-      return movies; // Array con las películas
+      return await response.json(); // DEVUELVE EL ARRAY DIRECTO
     } catch (error) {
       console.error('Error al obtener las películas:', error);
-      return []; // Devuelve un array vacío si falla la petición
+      return [];
     }
-  }
+}
