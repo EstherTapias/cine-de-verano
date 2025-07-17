@@ -43,13 +43,19 @@ function renderMovies(movies) {
 
     // Solo imagen + titulo para la vista de grid
     card.innerHTML = `
-      <div class="movie-poster">
-        <img src="${movie.poster_url}" alt="Póster de ${movie.title}">
-      </div>
-      <div class="movie-title">
-        <h3>${movie.title}</h3>
-      </div>
-    `;
+    <div class="movie-poster">
+      <img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img">
+    </div>
+  `;
+  container.appendChild(card);
+
+  // Ahora el título
+  const title = document.createElement('div');
+  title.className = 'movie-title-under';
+  title.innerHTML = `<h3>${movie.title}</h3>`;
+  container.appendChild(title);
+  
+  
 
     // Efecto neón (usa solo CSS :hover si prefieres, esto es opcional por JS)
     card.addEventListener('mouseenter', () => {
@@ -66,6 +72,7 @@ function renderMovies(movies) {
     container.appendChild(card);
   });
 }
+
 
 // ============================
 // Modal expandido de la película
