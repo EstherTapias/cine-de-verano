@@ -210,17 +210,320 @@ nav button:hover {
     box-shadow: 0 0 10px #ffcc70;
 }
 /* ========================================
-   CONTENIDO PRINCIPAL
+   ESTILOS PARA CARDS DE PELÍCULAS
 ========================================= */
+
+/* Contenedor principal de las cards - Grid responsive */
 #movie-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    /* 4 columnas en pantallas grandes, se adapta automáticamente */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem; /* Espacio entre cards */
     padding: 2rem;
     margin-top: 2rem;
     color: #ffffff;
     z-index: 5;
     position: relative;
+    /* Centrar el contenido si hay menos de 4 cards */
+    justify-content: center;
+    max-width: 1400px; /* Límite máximo para pantallas muy anchas */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Estilo individual de cada card */
+.movie-card {
+    /* Fondo glassmorphism acorde con el diseño */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    
+    /* Sombra suave dorada que complementa el atardecer */
+    box-shadow: 
+        0 8px 32px rgba(255, 204, 112, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    /* Borde sutil dorado */
+    border: 1px solid rgba(255, 204, 112, 0.2);
+    
+    /* Transición suave para efectos hover */
+    transition: all 0.3s ease;
+    
+    /* Flexbox para organizar contenido interno */
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Altura uniforme para todas las cards */
+    
+    /* Cursor pointer para indicar interactividad */
+    cursor: pointer;
+    
+    /* Posición relativa para elementos absolutos internos */
+    position: relative;
+    
+    /* Overflow hidden para efectos de imagen */
+    overflow: hidden;
+}
+
+/* Efecto hover para las cards */
+.movie-card:hover {
+    /* Elevación visual al pasar el mouse */
+    transform: translateY(-5px);
+    
+    /* Intensificar sombra y brillo dorado */
+    box-shadow: 
+        0 12px 40px rgba(255, 204, 112, 0.2),
+        0 4px 16px rgba(0, 0, 0, 0.15);
+    
+    /* Intensificar borde dorado */
+    border-color: rgba(255, 204, 112, 0.4);
+    
+    /* Efecto de brillo interno */
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Título de la película */
+.movie-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    color: #fff9e6;
+    
+    /* Efecto de texto brillante */
+    text-shadow: 0 0 8px rgba(255, 204, 112, 0.3);
+    
+    /* Limitar líneas del título */
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* Información de la película (año, género, etc.) */
+.movie-info {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #e6d7c3;
+    opacity: 0.9;
+}
+
+/* Etiquetas de información (año, género) */
+.movie-info span {
+    display: inline-block;
+    background: rgba(255, 204, 112, 0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    margin-right: 0.5rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255, 204, 112, 0.2);
+}
+
+/* Descripción de la película */
+.movie-description {
+    flex-grow: 1; /* Ocupa el espacio disponible */
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #f0e6d6;
+    opacity: 0.9;
+    
+    /* Limitar altura y añadir scroll si es necesario */
+    max-height: 120px;
+    overflow-y: auto;
+    
+    /* Scrollbar personalizada */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 204, 112, 0.3) transparent;
+}
+
+/* Scrollbar webkit para mejor compatibilidad */
+.movie-description::-webkit-scrollbar {
+    width: 4px;
+}
+
+.movie-description::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.movie-description::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 112, 0.3);
+    border-radius: 2px;
+}
+
+/* Contenedor de botones de acción */
+.movie-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto; /* Empuja los botones hacia abajo */
+}
+
+/* Botones de acción (editar, eliminar) */
+.movie-actions button {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+/* Botón de editar */
+.btn-edit {
+    background: rgba(255, 204, 112, 0.2);
+    color: #ffcc70;
+    border: 1px solid rgba(255, 204, 112, 0.3);
+}
+
+.btn-edit:hover {
+    background: rgba(255, 204, 112, 0.3);
+    color: #401a49;
+    transform: scale(1.05);
+}
+
+/* Botón de eliminar */
+.btn-delete {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff9999;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.btn-delete:hover {
+    background: rgba(255, 107, 107, 0.3);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Indicador de película favorita */
+.movie-favorite {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #ffcc70;
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Responsive Design para las cards */
+
+/* Pantallas grandes (1200px+) - 4 columnas */
+@media (min-width: 1200px) {
+    #movie-list {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+    }
+}
+
+/* Pantallas medianas (768px - 1199px) - 3 columnas */
+@media (min-width: 768px) and (max-width: 1199px) {
+    #movie-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .movie-card {
+        padding: 1.2rem;
+    }
+    
+    .movie-card h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Pantallas pequeñas (480px - 767px) - 2 columnas */
+@media (min-width: 480px) and (max-width: 767px) {
+    #movie-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .movie-card {
+        padding: 1rem;
+    }
+    
+    .movie-card h3 {
+        font-size: 1.1rem;
+    }
+    
+    .movie-info {
+        font-size: 0.8rem;
+    }
+    
+    .movie-description {
+        font-size: 0.8rem;
+        max-height: 100px;
+    }
+}
+
+/* Pantallas muy pequeñas (menos de 480px) - 1 columna */
+@media (max-width: 479px) {
+    #movie-list {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .movie-card {
+        padding: 1rem;
+    }
+    
+    .movie-card h3 {
+        font-size: 1rem;
+    }
+    
+    .movie-actions {
+        flex-direction: column;
+    }
+    
+    .movie-actions button {
+        margin-bottom: 0.3rem;
+    }
+}
+
+/* Animación de entrada para nuevas cards */
+@keyframes movieCardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicar animación a cards nuevas */
+.movie-card.new-card {
+    animation: movieCardFadeIn 0.5s ease-out;
+}
+
+/* Estado de carga para cards */
+.movie-card.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.movie-card.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 204, 112, 0.3);
+    border-top: 2px solid #ffcc70;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 /* ========================================
    FORMULARIO DE PELÍCULAS
