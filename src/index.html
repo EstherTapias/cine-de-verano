@@ -36,7 +36,20 @@
         <div class="seagull seagull-2"></div>
         <div class="seagull seagull-3"></div>
     </div>
-
+        <!-- Sección del formulario para añadir nuevas películas -->
+        <section id="movie-form-container">
+            <button id="toggle-form">➕ Añadir nueva película</button>
+            <form id="movie-form" class="hidden">
+                <input type="text" name="title" placeholder="Título de la película" required />
+                <input type="text" name="director" placeholder="Director" />
+                <input type="number" name="release_year" placeholder="Año de estreno" />
+                <input type="text" name="genre" placeholder="Género" />
+                <textarea name="movie_description" placeholder="Descripción"></textarea>
+                <input type="text" name="poster_url" placeholder="URL del póster" />
+                <input type="text" name="trailer_url" placeholder="URL del tráiler" />
+                <button type="submit">🎬 Guardar película</button>
+            </form>
+        </section>
     <!-- Contenido principal donde se muestran las películas -->
     <main>
         <section id="movie-list">
@@ -44,20 +57,7 @@
         </section>
     </main>
 
-    <!-- Sección del formulario para añadir nuevas películas -->
-    <section id="movie-form-container">
-        <button id="toggle-form">➕ Añadir nueva película</button>
-        <form id="movie-form" class="hidden">
-            <input type="text" name="title" placeholder="Título de la película" required />
-            <input type="text" name="director" placeholder="Director" />
-            <input type="number" name="release_year" placeholder="Año de estreno" />
-            <input type="text" name="genre" placeholder="Género" />
-            <textarea name="movie_description" placeholder="Descripción"></textarea>
-            <input type="text" name="poster_url" placeholder="URL del póster" />
-            <input type="text" name="trailer_url" placeholder="URL del tráiler" />
-            <button type="submit">🎬 Guardar película</button>
-        </form>
-    </section>
+
 
     <!-- Footer centrado correctamente -->
     <footer>
@@ -65,8 +65,8 @@
     </footer>
 
     <!-- Scripts JavaScript -->
-    <script src="services.js"></script>
     <script type="module" src="main.js"></script>
+
 
 </body>
 </html>

@@ -1,23 +1,32 @@
-// Importa la función para fetch de pelis
 import { getMovies } from './services.js';
 
-// ============= MOSTRAR PELÍCULAS =============
+// =======================
+// Cuando el DOM está listo
+// =======================
+
 document.addEventListener('DOMContentLoaded', () => {
-  mostrarPeliculas();
+  displayMovies();
   initializeApp();
   setTimeout(applyMobileAdjustments, 100);
 });
 
-async function mostrarPeliculas() {
+// =============================================
+// Obtiene todas las películas y las pinta (grid)
+// =============================================
+
+async function displayMovies() {
   try {
-    const movies = await getMovies(); // ← ya es un array [{...},...]
+    const movies = await getMovies();
     renderMovies(movies);
   } catch (error) {
-    console.error('Error al cargar las películas:', error);
-    const contenedor = document.getElementById('movie-list');
-    contenedor.innerHTML = '<p>Error al cargar las películas. Inténtalo más tarde.</p>';
+    const container = document.getElementById('movie-list');
+    container.innerHTML = '<p>Error al cargar las películas. Inténtalo más tarde.</p>';
   }
 }
+
+// ===================================================
+// Renderiza todas las cards compactas (póster + título)
+// ===================================================
 
 function renderMovies(movies) {
   const container = document.getElementById('movie-list');
@@ -30,60 +39,167 @@ function renderMovies(movies) {
 
   movies.forEach(movie => {
     const card = document.createElement('article');
-    card.classList.add('movie-card');
+    card.className = 'movie-card';
 
+    // Solo imagen + titulo para la vista de grid
     card.innerHTML = `
-      <img src="${movie.poster_url}" alt="Póster de ${movie.title}" />
-      <h3>${movie.title}</h3>
-      <p><strong>Director:</strong> ${movie.director || 'Desconocido'}</p>
-      <p><strong>Año:</strong> ${movie.release_year || 'N/A'}</p>
-      <p><strong>Género:</strong> ${movie.genre || 'N/A'}</p>
-      <p>${movie.movie_description || ''}</p>
-      ${movie.trailer_url ? `<a href="${movie.trailer_url}" target="_blank">🎬 Ver tráiler</a>` : ''}
-    `;
+    <div class="movie-poster">
+      <img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img">
+    </div>
+  `;
+  container.appendChild(card);
 
+  // Ahora el título
+  const title = document.createElement('div');
+  title.className = 'movie-title-under';
+  title.innerHTML = `<h3>${movie.title}</h3>`;
+  container.appendChild(title);
+  
+  
+
+    // Efecto neón (usa solo CSS :hover si prefieres, esto es opcional por JS)
+    card.addEventListener('mouseenter', () => {
+      card.style.boxShadow = '0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(138, 43, 226, 0.6)';
+      card.style.transform = 'translateY(-5px) scale(1.02)';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+      card.style.transform = 'translateY(0) scale(1)';
+    });
+
+    // Expande al hacer click
+    card.addEventListener('click', () => openMovieModal(movie));
     container.appendChild(card);
   });
 }
 
-// ============= VARIABLES Y CONFIG. GENERAL =============
+
+// ============================
+// Modal expandido de la película
+// ============================
+
+function openMovieModal(movie) {
+  // Cierra/borra cualquier otro modal anterior
+  const existingModal = document.getElementById('movie-modal');
+  if (existingModal) existingModal.remove();
+
+  // Crea overlay y modal centrado limitado
+  const overlay = document.createElement('div');
+  overlay.id = 'movie-modal';
+  overlay.className = 'movie-modal-overlay';
+
+  overlay.innerHTML = `
+    <div class="movie-modal">
+      <button class="modal-close" title="Cerrar">&times;</button>
+      <div class="modal-content">
+        <div class="modal-poster">
+          <img src="${movie.poster_url}" alt="Póster de ${movie.title}">
+        </div>
+        <div class="modal-info">
+          <h2 class="modal-title">${movie.title}</h2>
+          <div class="modal-basic-info">
+            <div class="info-item"><span class="info-label">Director</span><div class="info-value">${movie.director || 'Desconocido'}</div></div>
+            <div class="info-item"><span class="info-label">Año</span><div class="info-value">${movie.release_year || 'N/A'}</div></div>
+            <div class="info-item"><span class="info-label">Género</span><div class="info-value">${movie.genre || 'N/A'}</div></div>
+            <div class="info-item"><span class="info-label">Duración</span><div class="info-value">${movie.duration ? movie.duration + ' min' : 'N/A'}</div></div>
+            <div class="info-item"><span class="info-label">Puntuación</span><div class="info-value">${movie.rating ? movie.rating + '/10' : 'N/A'}</div></div>
+            <div class="info-item"><span class="info-label">Idioma</span><div class="info-value">${movie.language || 'N/A'}</div></div>
+            <div class="info-item"><span class="info-label">País</span><div class="info-value">${movie.country || 'N/A'}</div></div>
+          </div>
+          ${movie.cast && movie.cast.length ?
+            `<div class="modal-cast">
+              <div class="cast-title">Reparto:</div>
+              <div class="cast-list">
+                ${movie.cast.map(actor => `<span class="cast-member">${actor}</span>`).join('')}
+              </div>
+            </div>` : ''
+          }
+          <div class="modal-description">${movie.movie_description || ''}</div>
+          ${movie.trailer_url ? `<a href="${movie.trailer_url}" target="_blank" rel="noopener" class="trailer-button">🎬 Ver tráiler</a>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Animación de entrada
+  setTimeout(() => {
+    overlay.classList.add('show');
+  }, 10);
+
+  // Cerrar modal: botón, click fuera, o ESC
+  overlay.querySelector('.modal-close').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', closeWithEsc);
+}
+
+// Cierra y elimina el modal
+function closeModal() {
+  const modal = document.getElementById('movie-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.remove();
+    }, 300);
+  }
+  document.removeEventListener('keydown', closeWithEsc);
+}
+
+// Cerrar modal con tecla ESC
+function closeWithEsc(e) {
+  if (e.key === 'Escape') closeModal();
+}
+
+// ===================
+// RESTO DE FUNCIONES
+// ===================
+
+// Variables para extras
 const toggleFormButton = document.getElementById('toggle-form');
 const movieForm = document.getElementById('movie-form');
 const backgroundScene = document.querySelector('.background-scene');
-
 const skyColors = ['#ffa17f', '#ff758c', '#8559a5', '#5f0a87'];
 let currentSkyIndex = 0;
 
-// ============= FORMULARIO =============
+// Mostrar/ocultar formulario de película
 function toggleMovieForm() {
   movieForm.classList.toggle('show');
   toggleFormButton.textContent = movieForm.classList.contains('show')
     ? '❌ Cerrar formulario'
     : '➕ Añadir nueva película';
 }
-toggleFormButton.addEventListener('click', toggleMovieForm);
+if (toggleFormButton) {
+  toggleFormButton.addEventListener('click', toggleMovieForm);
+}
 
-// ============= CAMBIO DINÁMICO DEL CIELO =============
+// Cambia el color de fondo del cielo animado
 function changeSkyColor() {
   currentSkyIndex = (currentSkyIndex + 1) % skyColors.length;
   const newGradient = `linear-gradient(to bottom, ${skyColors[currentSkyIndex]}, #845ec2)`;
-  backgroundScene.style.background = newGradient;
+  if (backgroundScene) {
+    backgroundScene.style.background = newGradient;
+  }
 }
 
 function createSkyToggleButton() {
   if (document.getElementById('sky-toggle-btn')) return;
+
   const skyToggleButton = document.createElement('button');
   skyToggleButton.textContent = '🎨 Cambiar cielo';
   skyToggleButton.id = 'sky-toggle-btn';
   skyToggleButton.type = 'button';
+
   skyToggleButton.addEventListener('click', changeSkyColor);
+
+  // Insertar después del párrafo de descripción en el header
   const desc = document.getElementById('header-desc');
   if (desc && desc.parentNode) {
     desc.parentNode.insertBefore(skyToggleButton, desc.nextSibling);
   }
 }
 
-// ============= FILTROS DE GÉNERO (NO CAMBIA) =============
+// Genera los filtros de género (si los tienes)
 function setupGenreFilters() {
   const genreButtons = document.querySelectorAll('[data-genre]');
   genreButtons.forEach(button => {
@@ -92,18 +208,20 @@ function setupGenreFilters() {
       genreButtons.forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
       filterMoviesByGenre(selectedGenre);
-      console.log(`Filtro aplicado: ${selectedGenre}`);
+      // Aquí podrías hacer el filtrado real en el grid usando renderMovies([...])
     });
   });
 }
+
 function filterMoviesByGenre(genre) {
-  // ¡Aquí pondrías lógica para filtrar si lo deseas!
   console.log(`Filtrando películas por género: ${genre}`);
+  // Aquí puedes implementar el filtrado y volver a llamar a renderMovies(listaFiltrada)
 }
 
-// ============= FORMULARIO: GUARDAR NUEVA PELÍCULA (AÚN MOCKED) =============
+// Manejo del envío del formulario para añadir nueva película
 function handleMovieFormSubmit(event) {
   event.preventDefault();
+
   const formData = new FormData(movieForm);
   const movieData = {
     title: formData.get('title'),
@@ -114,20 +232,25 @@ function handleMovieFormSubmit(event) {
     poster_url: formData.get('poster_url'),
     trailer_url: formData.get('trailer_url')
   };
-  if (!movieData.title.trim()) {
+
+  if (!movieData.title || !movieData.title.trim()) {
     alert('Por favor, ingresa un título para la película');
     return;
   }
-  // Aquí podrías hacer POST a tu JSON-Server si lo deseas
-  console.log('Nueva película añadida:', movieData);
+
+  // Aquí podrías hacer POST a la API si lo deseas
+
   movieForm.reset();
   movieForm.classList.remove('show');
   toggleFormButton.textContent = '➕ Añadir nueva película';
   showSuccessMessage('¡Película añadida correctamente!');
 }
+
+// Mensaje verde de éxito flotante
 function showSuccessMessage(message) {
   const successMessage = document.createElement('div');
   successMessage.textContent = message;
+
   Object.assign(successMessage.style, {
     position: 'fixed',
     top: '50%',
@@ -141,11 +264,14 @@ function showSuccessMessage(message) {
     fontFamily: 'Orbitron, sans-serif',
     boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
   });
+
   document.body.appendChild(successMessage);
-  setTimeout(() => { successMessage.remove(); }, 3000);
+  setTimeout(() => {
+    successMessage.remove();
+  }, 3000);
 }
 
-// ============= EFECTOS Y EXTRAS VISUALES (NO CAMBIA) =============
+// Parallax de sol
 function addParallaxEffect() {
   const sun = document.getElementById('sun');
   window.addEventListener('scroll', () => {
@@ -156,6 +282,8 @@ function addParallaxEffect() {
     }
   });
 }
+
+// Gaviotas con hover
 function addSeagullHoverEffect() {
   const seagulls = document.querySelectorAll('.seagull');
   seagulls.forEach(seagull => {
@@ -163,6 +291,7 @@ function addSeagullHoverEffect() {
       seagull.style.transform = 'scale(1.2)';
       seagull.style.filter = 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.8))';
     });
+
     seagull.addEventListener('mouseleave', () => {
       seagull.style.transform = 'scale(1)';
       seagull.style.filter = 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))';
@@ -170,27 +299,37 @@ function addSeagullHoverEffect() {
   });
 }
 
-// ============= INICIALIZACIÓN GENERAL APP =============
+// Inicializa toda la interfaz de usuario
 function initializeApp() {
   setupGenreFilters();
   createSkyToggleButton();
   addParallaxEffect();
   addSeagullHoverEffect();
-  movieForm.addEventListener('submit', handleMovieFormSubmit);
+  if (movieForm) {
+    movieForm.addEventListener('submit', handleMovieFormSubmit);
+  }
+  console.log('🎬 Cine de Verano inicializado correctamente');
 }
 
-// ============= UTILIDADES Y AJUSTES MÓVILES (NO CAMBIA) =============
+// Detecta móvil
 function isMobileDevice() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
+
+// Ajusta efectos en móvil
 function applyMobileAdjustments() {
   if (isMobileDevice()) {
     const seagulls = document.querySelectorAll('.seagull');
-    seagulls.forEach(seagull => { seagull.style.animationDuration = '20s'; });
+    seagulls.forEach(seagull => {
+      seagull.style.animationDuration = '20s';
+    });
+
     const skyButton = document.getElementById('sky-toggle-btn');
     if (skyButton) {
       skyButton.style.fontSize = '0.8rem';
       skyButton.style.padding = '0.4rem 0.8rem';
     }
+
+    console.log('Ajustes para móviles aplicados');
   }
 }
