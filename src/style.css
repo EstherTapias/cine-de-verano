@@ -210,202 +210,317 @@ nav button:hover {
     box-shadow: 0 0 10px #ffcc70;
 }
 /* ========================================
-   ESTILOS PARA CARDS DE PELÍCULAS
+   ESTILOS MEJORADOS PARA CARDS EXPANDIBLES
 ========================================= */
 
 /* Contenedor principal de las cards - Grid responsive */
 #movie-list {
     display: grid;
-    /* 4 columnas en pantallas grandes, se adapta automáticamente */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem; /* Espacio entre cards */
+    gap: 2rem;
     padding: 2rem;
     margin-top: 2rem;
     color: #ffffff;
     z-index: 5;
     position: relative;
-    /* Centrar el contenido si hay menos de 4 cards */
     justify-content: center;
-    max-width: 1400px; /* Límite máximo para pantallas muy anchas */
+    max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Estilo individual de cada card */
+/* Estilo individual de cada card - Vista compacta por defecto */
 .movie-card {
-    /* Fondo glassmorphism acorde con el diseño */
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    padding: 1.5rem;
+    padding: 0; /* Sin padding inicial para la imagen */
     
-    /* Sombra suave dorada que complementa el atardecer */
+    /* Sombra suave dorada */
     box-shadow: 
         0 8px 32px rgba(255, 204, 112, 0.1),
         0 2px 8px rgba(0, 0, 0, 0.1);
     
-    /* Borde sutil dorado */
     border: 1px solid rgba(255, 204, 112, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     
-    /* Transición suave para efectos hover */
-    transition: all 0.3s ease;
-    
-    /* Flexbox para organizar contenido interno */
     display: flex;
     flex-direction: column;
-    height: 100%; /* Altura uniforme para todas las cards */
+    height: 420px; /* Altura fija para vista compacta */
     
-    /* Cursor pointer para indicar interactividad */
     cursor: pointer;
-    
-    /* Posición relativa para elementos absolutos internos */
     position: relative;
-    
-    /* Overflow hidden para efectos de imagen */
     overflow: hidden;
+    
+    /* Transformación inicial */
+    transform: scale(1);
 }
 
-/* Efecto hover para las cards */
+/* Efecto hover mejorado con neón */
 .movie-card:hover {
-    /* Elevación visual al pasar el mouse */
-    transform: translateY(-5px);
+    transform: translateY(-8px) scale(1.02);
     
-    /* Intensificar sombra y brillo dorado */
+    /* Sombra neón intensa */
     box-shadow: 
-        0 12px 40px rgba(255, 204, 112, 0.2),
-        0 4px 16px rgba(0, 0, 0, 0.15);
+        0 0 30px rgba(255, 204, 112, 0.6),
+        0 0 60px rgba(255, 204, 112, 0.4),
+        0 0 90px rgba(255, 204, 112, 0.2),
+        0 12px 40px rgba(0, 0, 0, 0.2);
     
-    /* Intensificar borde dorado */
-    border-color: rgba(255, 204, 112, 0.4);
+    /* Borde neón */
+    border-color: rgba(255, 204, 112, 0.8);
     
-    /* Efecto de brillo interno */
-    background: rgba(255, 255, 255, 0.12);
+    /* Brillo interno más intenso */
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Imagen del póster */
+.movie-poster {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px 20px 0 0;
+    transition: all 0.3s ease;
+}
+
+/* Contenido básico visible (título) */
+.movie-basic-info {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
 
 /* Título de la película */
 .movie-card h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.3rem;
-    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
     color: #fff9e6;
-    
-    /* Efecto de texto brillante */
-    text-shadow: 0 0 8px rgba(255, 204, 112, 0.3);
-    
-    /* Limitar líneas del título */
-    line-height: 1.4;
+    text-shadow: 0 0 8px rgba(255, 204, 112, 0.4);
+    line-height: 1.3;
+    margin: 0;
     word-wrap: break-word;
+    max-height: 3.9rem; /* Máximo 3 líneas */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
-/* Información de la película (año, género, etc.) */
-.movie-info {
+/* ========================================
+   MODAL EXPANDIDO - OVERLAY
+========================================= */
+
+.movie-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.movie-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Contenedor del modal */
+.movie-modal {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 0;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    border: 2px solid rgba(255, 204, 112, 0.3);
+    
+    /* Sombra neón para el modal */
+    box-shadow: 
+        0 0 40px rgba(255, 204, 112, 0.4),
+        0 0 80px rgba(255, 204, 112, 0.2);
+    
+    /* Animación de entrada */
+    transform: scale(0.8) translateY(50px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.movie-modal-overlay.show .movie-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* Botón de cerrar */
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 107, 107, 0.2);
+    border: 2px solid rgba(255, 107, 107, 0.4);
+    color: #ff9999;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.modal-close:hover {
+    background: rgba(255, 107, 107, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+}
+
+/* Layout del modal */
+.modal-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    min-height: 400px;
+}
+
+/* Imagen en el modal */
+.modal-poster {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Información detallada */
+.modal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: #fff9e6;
+}
+
+.modal-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    color: #fff9e6;
+    text-shadow: 0 0 12px rgba(255, 204, 112, 0.5);
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+/* Información básica en grid */
+.modal-basic-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
     margin-bottom: 1rem;
-    font-size: 0.9rem;
-    color: #e6d7c3;
-    opacity: 0.9;
 }
 
-/* Etiquetas de información (año, género) */
-.movie-info span {
-    display: inline-block;
-    background: rgba(255, 204, 112, 0.15);
-    padding: 0.2rem 0.5rem;
+.info-item {
+    background: rgba(255, 204, 112, 0.1);
+    padding: 0.8rem;
     border-radius: 12px;
-    margin-right: 0.5rem;
-    margin-bottom: 0.3rem;
+    border: 1px solid rgba(255, 204, 112, 0.2);
+    text-align: center;
+}
+
+.info-label {
     font-size: 0.8rem;
+    color: #e6d7c3;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #ffcc70;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Descripción */
+.modal-description {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 204, 112, 0.1);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    color: #f0e6d6;
+}
+
+/* Reparto */
+.modal-cast {
+    margin-top: 1rem;
+}
+
+.cast-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: #ffcc70;
+    margin-bottom: 0.5rem;
+}
+
+.cast-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.cast-member {
+    background: rgba(255, 204, 112, 0.15);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #e6d7c3;
     border: 1px solid rgba(255, 204, 112, 0.2);
 }
 
-/* Descripción de la película */
-.movie-description {
-    flex-grow: 1; /* Ocupa el espacio disponible */
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #f0e6d6;
-    opacity: 0.9;
-    
-    /* Limitar altura y añadir scroll si es necesario */
-    max-height: 120px;
-    overflow-y: auto;
-    
-    /* Scrollbar personalizada */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 204, 112, 0.3) transparent;
-}
-
-/* Scrollbar webkit para mejor compatibilidad */
-.movie-description::-webkit-scrollbar {
-    width: 4px;
-}
-
-.movie-description::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.movie-description::-webkit-scrollbar-thumb {
-    background: rgba(255, 204, 112, 0.3);
-    border-radius: 2px;
-}
-
-/* Contenedor de botones de acción */
-.movie-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: auto; /* Empuja los botones hacia abajo */
-}
-
-/* Botones de acción (editar, eliminar) */
-.movie-actions button {
-    flex: 1;
-    padding: 0.5rem;
+/* Botón de tráiler */
+.trailer-button {
+    background: linear-gradient(45deg, #ffcc70, #ff9a9e);
+    color: #401a49;
     border: none;
-    border-radius: 12px;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
+    font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: 500;
+    margin-top: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(255, 204, 112, 0.3);
 }
 
-/* Botón de editar */
-.btn-edit {
-    background: rgba(255, 204, 112, 0.2);
-    color: #ffcc70;
-    border: 1px solid rgba(255, 204, 112, 0.3);
+.trailer-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 204, 112, 0.5);
+    background: linear-gradient(45deg, #ffc048, #ff758c);
 }
 
-.btn-edit:hover {
-    background: rgba(255, 204, 112, 0.3);
-    color: #401a49;
-    transform: scale(1.05);
-}
-
-/* Botón de eliminar */
-.btn-delete {
-    background: rgba(255, 107, 107, 0.2);
-    color: #ff9999;
-    border: 1px solid rgba(255, 107, 107, 0.3);
-}
-
-.btn-delete:hover {
-    background: rgba(255, 107, 107, 0.3);
-    color: #fff;
-    transform: scale(1.05);
-}
-
-/* Indicador de película favorita */
-.movie-favorite {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    color: #ffcc70;
-    font-size: 1.2rem;
-    opacity: 0.8;
-}
-
-/* Responsive Design para las cards */
+/* ========================================
+   RESPONSIVE DESIGN
+========================================= */
 
 /* Pantallas grandes (1200px+) - 4 columnas */
 @media (min-width: 1200px) {
@@ -425,15 +540,15 @@ nav button:hover {
     }
     
     .movie-card {
-        padding: 1.2rem;
+        height: 380px;
     }
     
-    .movie-card h3 {
-        font-size: 1.2rem;
+    .movie-poster {
+        height: 260px;
     }
 }
 
-/* Pantallas pequeñas (480px - 767px) - 2 columnas */
+/* Pantallas pequeñas tablet (480px - 767px) - 2 columnas */
 @media (min-width: 480px) and (max-width: 767px) {
     #movie-list {
         grid-template-columns: repeat(2, 1fr);
@@ -442,20 +557,27 @@ nav button:hover {
     }
     
     .movie-card {
-        padding: 1rem;
+        height: 350px;
+    }
+    
+    .movie-poster {
+        height: 240px;
     }
     
     .movie-card h3 {
         font-size: 1.1rem;
     }
     
-    .movie-info {
-        font-size: 0.8rem;
+    /* Modal responsive */
+    .modal-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
-    .movie-description {
-        font-size: 0.8rem;
-        max-height: 100px;
+    .modal-poster {
+        height: 300px;
+        max-width: 200px;
+        margin: 0 auto;
     }
 }
 
@@ -468,23 +590,51 @@ nav button:hover {
     }
     
     .movie-card {
-        padding: 1rem;
+        height: 380px;
+    }
+    
+    .movie-poster {
+        height: 280px;
     }
     
     .movie-card h3 {
         font-size: 1rem;
     }
     
-    .movie-actions {
-        flex-direction: column;
+    /* Modal móvil */
+    .movie-modal {
+        width: 95%;
+        max-height: 95vh;
     }
     
-    .movie-actions button {
-        margin-bottom: 0.3rem;
+    .modal-content {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .modal-poster {
+        height: 250px;
+        max-width: 180px;
+        margin: 0 auto;
+    }
+    
+    .modal-title {
+        font-size: 1.5rem;
+    }
+    
+    .modal-basic-info {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .trailer-button {
+        width: 100%;
+        padding: 1rem;
     }
 }
 
-/* Animación de entrada para nuevas cards */
+/* Animaciones */
 @keyframes movieCardFadeIn {
     from {
         opacity: 0;
@@ -496,34 +646,27 @@ nav button:hover {
     }
 }
 
-/* Aplicar animación a cards nuevas */
 .movie-card.new-card {
-    animation: movieCardFadeIn 0.5s ease-out;
+    animation: movieCardFadeIn 0.6s ease-out;
 }
 
-/* Estado de carga para cards */
-.movie-card.loading {
-    opacity: 0.6;
-    pointer-events: none;
+/* Scrollbar personalizada para el modal */
+.movie-modal::-webkit-scrollbar {
+    width: 8px;
 }
 
-.movie-card.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(255, 204, 112, 0.3);
-    border-top: 2px solid #ffcc70;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    transform: translate(-50%, -50%);
+.movie-modal::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
 }
 
-@keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
+.movie-modal::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 112, 0.5);
+    border-radius: 10px;
+}
+
+.movie-modal::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 204, 112, 0.7);
 }
 /* ========================================
    FORMULARIO DE PELÍCULAS
