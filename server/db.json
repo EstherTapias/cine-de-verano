@@ -1,137 +1,137 @@
 {
-    "movies": [
-        {
-            "id": "1",
-            "title": "Trainspotting",
-            "director": "Danny Boyle",
-            "movie_description": "Un grupo de jóvenes heroinómanos escoceses intenta encontrar sentido a sus vidas en Edimburgo mientras lidian con la adicción y la realidad.",
-            "release_year": 1996,
-            "genre": "Drama",
-            "rating": 8.1,
-            "cast": [
-                "Ewan McGregor",
-                "Ewen Bremner",
-                "Jonny Lee Miller"
-            ],
-            "poster_url": "https://cdn.livebid.cz/imgs/888/92.jpg",
-            "trailer_url": "https://www.youtube.com/watch?v=8LuxOYIpu-I",
-            "duration": 94,
-            "language": "English",
-            "country": "UK"
-        },
-        {
-            "id": "2",
-            "title": "Requiem for a Dream",
-            "director": "Darren Aronofsky",
-            "movie_description": "Cuatro personas luchan con sus adicciones mientras su vida se desmorona en una espiral de dolor, soledad y desesperación.",
-            "release_year": 2000,
-            "genre": "Drama / Psychological Thriller",
-            "rating": 8.3,
-            "cast": [
-                "Ellen Burstyn",
-                "Jared Leto",
-                "Jennifer Connelly"
-            ],
-            "poster_url": "https://upload.wikimedia.org/wikipedia/en/9/92/Requiem_for_a_dream.jpg",
-            "trailer_url": "https://www.youtube.com/watch?v=0nU7dC9bIDg",
-            "duration": 102,
-            "language": "English",
-            "country": "USA"
-        },
-        {
-            "id": "3",
-            "title": "Spun",
-            "director": "Jonas Åkerlund",
-            "movie_description": "Ross, un joven adicto a la metanfetamina, se adentra en un mundo caótico lleno de adictos, traficantes y delirios psicodélicos.",
-            "release_year": 2002,
-            "genre": "Crime / Drama / Dark Comedy",
-            "rating": 6.8,
-            "cast": [
-                "Jason Schwartzman",
-                "Mena Suvari",
-                "Mickey Rourke"
-            ],
-            "poster_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhLEACFV8_Rkbi-FuPb194Ng5lsIFPyZe02w&s",
-            "trailer_url": "https://www.youtube.com/watch?v=hspMer7siy4",
-            "duration": 101,
-            "language": "English",
-            "country": "USA"
-        },
-        {
-            "id": "4",
-            "title": "Donnie Darko",
-            "director": "Richard Kelly",
-            "movie_description": "Un adolescente problemático comienza a tener visiones de un misterioso conejo gigante que lo lleva a cuestionar la realidad y el tiempo.",
-            "release_year": 2001,
-            "genre": "Sci-Fi / Drama / Psychological Thriller",
-            "rating": 8.0,
-            "cast": [
-                "Jake Gyllenhaal",
-                "Jena Malone",
-                "Maggie Gyllenhaal"
-            ],
-            "poster_url": "https://upload.wikimedia.org/wikipedia/en/d/db/Donnie_Darko_poster.jpg",
-            "trailer_url": "https://www.youtube.com/watch?v=ZZyBaFYFySk",
-            "duration": 113,
-            "language": "English",
-            "country": "USA"
-        },
-        {
-          "id": "5",
-          "title": "Memento",
-          "director": "Christopher Nolan",
-          "movie_description": "Un hombre con pérdida de memoria a corto plazo intenta encontrar al asesino de su esposa mientras reconstruye su vida a través de notas y tatuajes.",
-          "release_year": 2000,
-          "genre": "Psychological Thriller / Mystery",
-          "rating": 8.4,
-          "cast": [
-            "Guy Pearce",
-            "Carrie-Anne Moss",
-            "Joe Pantoliano"
-          ],
-          "poster_url": "https://upload.wikimedia.org/wikipedia/en/c/c7/Memento_poster.jpg",
-          "trailer_url": "https://www.youtube.com/watch?v=0vS0E9bBSL0",
-          "duration": 113,
-          "language": "English",
-          "country": "USA"
-        },
-        {
-          "id": "6",
-          "title": "Tesis",
-          "director": "Alejandro Amenábar",
-          "movie_description": "Una estudiante de cine se adentra en una peligrosa investigación sobre el cine snuff y descubre secretos oscuros en su universidad.",
-          "release_year": 1996,
-          "genre": "Thriller / Horror / Mystery",
-          "rating": 7.4,
-          "cast": [
-            "Ana Torrent",
-            "Fele Martínez",
-            "Eduardo Noriega"
-          ],
-          "poster_url": "https://upload.wikimedia.org/wikipedia/ca/c/c2/Tesis-peli.jpg",
-          "trailer_url": "https://www.youtube.com/watch?v=Ku4CbW2m7Sg",
-          "duration": 125,
-          "language": "Spanish",
-          "country": "Spain"
-        },
-        {
-          "id": "7",
-          "title": "Black Swan",
-          "director": "Darren Aronofsky",
-          "movie_description": "Una bailarina de ballet lucha con la presión del papel principal y su propia salud mental en una espiral hacia la obsesión y la locura.",
-          "release_year": 2010,
-          "genre": "Psychological Thriller / Drama",
-          "rating": 8.0,
-          "cast": [
-            "Natalie Portman",
-            "Mila Kunis",
-            "Vincent Cassel"
-          ],
-          "poster_url": "https://upload.wikimedia.org/wikipedia/en/6/68/Black_Swan_poster.jpg",
-          "trailer_url": "https://www.youtube.com/watch?v=5jaI1XOB-bs",
-          "duration": 108,
-          "language": "English",
-          "country": "USA"
-        }
-    ]
+  "movies": [
+    {
+      "id": "1",
+      "title": "Trainspotting",
+      "director": "Danny Boyle",
+      "movie_description": "Un grupo de jóvenes heroinómanos escoceses intenta encontrar sentido a sus vidas en Edimburgo mientras lidian con la adicción y la realidad.",
+      "release_year": 1996,
+      "genre": "Drama",
+      "rating": 8.1,
+      "cast": [
+        "Ewan McGregor",
+        "Ewen Bremner",
+        "Jonny Lee Miller"
+      ],
+      "poster_url": "https://cdn.livebid.cz/imgs/888/92.jpg",
+      "trailer_url": "https://www.youtube.com/watch?v=8LuxOYIpu-I",
+      "duration": 94,
+      "language": "English",
+      "country": "UK"
+    },
+    {
+      "id": "2",
+      "title": "Requiem for a Dream",
+      "director": "Darren Aronofsky",
+      "movie_description": "Cuatro personas luchan con sus adicciones mientras su vida se desmorona en una espiral de dolor, soledad y desesperación.",
+      "release_year": 2000,
+      "genre": "Drama / Psychological Thriller",
+      "rating": 8.3,
+      "cast": [
+        "Ellen Burstyn",
+        "Jared Leto",
+        "Jennifer Connelly"
+      ],
+      "poster_url": "https://upload.wikimedia.org/wikipedia/en/9/92/Requiem_for_a_dream.jpg",
+      "trailer_url": "https://www.youtube.com/watch?v=0nU7dC9bIDg",
+      "duration": 102,
+      "language": "English",
+      "country": "USA"
+    },
+    {
+      "id": "3",
+      "title": "Spun",
+      "director": "Jonas Åkerlund",
+      "movie_description": "Ross, un joven adicto a la metanfetamina, se adentra en un mundo caótico lleno de adictos, traficantes y delirios psicodélicos.",
+      "release_year": 2002,
+      "genre": "Crime / Drama / Dark Comedy",
+      "rating": 6.8,
+      "cast": [
+        "Jason Schwartzman",
+        "Mena Suvari",
+        "Mickey Rourke"
+      ],
+      "poster_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhLEACFV8_Rkbi-FuPb194Ng5lsIFPyZe02w&s",
+      "trailer_url": "https://www.youtube.com/watch?v=hspMer7siy4",
+      "duration": 101,
+      "language": "English",
+      "country": "USA"
+    },
+    {
+      "id": "4",
+      "title": "Donnie Darko",
+      "director": "Richard Kelly",
+      "movie_description": "Un adolescente problemático comienza a tener visiones de un misterioso conejo gigante que lo lleva a cuestionar la realidad y el tiempo.",
+      "release_year": 2001,
+      "genre": "Sci-Fi / Drama / Psychological Thriller",
+      "rating": 8,
+      "cast": [
+        "Jake Gyllenhaal",
+        "Jena Malone",
+        "Maggie Gyllenhaal"
+      ],
+      "poster_url": "https://upload.wikimedia.org/wikipedia/en/d/db/Donnie_Darko_poster.jpg",
+      "trailer_url": "https://www.youtube.com/watch?v=ZZyBaFYFySk",
+      "duration": 113,
+      "language": "English",
+      "country": "USA"
+    },
+    {
+      "id": "5",
+      "title": "Memento",
+      "director": "Christopher Nolan",
+      "movie_description": "Un hombre con pérdida de memoria a corto plazo intenta encontrar al asesino de su esposa mientras reconstruye su vida a través de notas y tatuajes.",
+      "release_year": 2000,
+      "genre": "Psychological Thriller / Mystery",
+      "rating": 8.4,
+      "cast": [
+        "Guy Pearce",
+        "Carrie-Anne Moss",
+        "Joe Pantoliano"
+      ],
+      "poster_url": "https://upload.wikimedia.org/wikipedia/en/c/c7/Memento_poster.jpg",
+      "trailer_url": "https://www.youtube.com/watch?v=0vS0E9bBSL0",
+      "duration": 113,
+      "language": "English",
+      "country": "USA"
+    },
+    {
+      "id": "6",
+      "title": "Tesis",
+      "director": "Alejandro Amenábar",
+      "movie_description": "Una estudiante de cine se adentra en una peligrosa investigación sobre el cine snuff y descubre secretos oscuros en su universidad.",
+      "release_year": 1996,
+      "genre": "Thriller / Horror / Mystery",
+      "rating": 7.4,
+      "cast": [
+        "Ana Torrent",
+        "Fele Martínez",
+        "Eduardo Noriega"
+      ],
+      "poster_url": "https://upload.wikimedia.org/wikipedia/ca/c/c2/Tesis-peli.jpg",
+      "trailer_url": "https://www.youtube.com/watch?v=Ku4CbW2m7Sg",
+      "duration": 125,
+      "language": "Spanish",
+      "country": "Spain"
+    },
+    {
+      "id": "7",
+      "title": "Black Swan",
+      "director": "Darren Aronofsky",
+      "movie_description": "Una bailarina de ballet lucha con la presión del papel principal y su propia salud mental en una espiral hacia la obsesión y la locura.",
+      "release_year": 2010,
+      "genre": "Psychological Thriller / Drama",
+      "rating": 8,
+      "cast": [
+        "Natalie Portman",
+        "Mila Kunis",
+        "Vincent Cassel"
+      ],
+      "poster_url": "https://upload.wikimedia.org/wikipedia/en/6/68/Black_Swan_poster.jpg",
+      "trailer_url": "https://www.youtube.com/watch?v=5jaI1XOB-bs",
+      "duration": 108,
+      "language": "English",
+      "country": "USA"
+    }
+  ]
 }
