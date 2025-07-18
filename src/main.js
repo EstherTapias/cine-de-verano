@@ -1,6 +1,5 @@
 import { getMovies, addMovie, editMovie, deleteMovie } from './services.js';
 
-// --------- Estado global de filtro -----------
 let allMovies = [];
 let currentGenre = "all";
 
@@ -10,15 +9,12 @@ const backgroundScene = document.querySelector('.background-scene');
 const skyColors = ['#ffa17f', '#ff758c', '#8559a5', '#5f0a87'];
 let currentSkyIndex = 0;
 
-// ========== INICIALIZACIÓN ==========
 document.addEventListener('DOMContentLoaded', () => {
   displayMovies();
   setupGenreFilters();
   initializeApp();
   setTimeout(applyMobileAdjustments, 100);
 });
-
-// ========== MAIN LOAD Y FILTRO =============
 
 async function displayMovies() {
   try {
@@ -29,21 +25,17 @@ async function displayMovies() {
   }
 }
 
-// Filtra películas donde CUALQUIERA de los géneros del campo coincida (case-insensitive, espacios limpios, varios separadores)
 function getMoviesByActiveGenre() {
   if (currentGenre === "all") return allMovies;
   return allMovies.filter(m => {
     if (!m.genre) return false;
-    // Dividir por "/", ",", ";" o cualquier combinación ("Drama, Thriller/Acción;Psicológico…")
-    // Quita espacios y normaliza.
     const genresArr = m.genre
-      .split(/[,\/;]+/) // divide por coma, barra, punto y coma
+      .split(/[,\/;]+/)
       .map(g => g.trim().toLowerCase());
     return genresArr.includes(currentGenre.trim().toLowerCase());
   });
 }
 
-// ========== FILTROS NAV ==========
 function setupGenreFilters() {
   const genreButtons = document.querySelectorAll('[data-genre]');
   genreButtons.forEach(btn => {
@@ -56,17 +48,11 @@ function setupGenreFilters() {
   });
 }
 
-// ========== GRID =============
 function renderMovies(movies) {
   const container = document.getElementById('movie-list');
-
-  // Aplica clase de desvanecimiento
   container.classList.add('fade-out');
-
-  // Esperamos al final de la transición para actualizar el contenido
   setTimeout(() => {
     container.innerHTML = '';
-
     if (!movies.length) {
       container.innerHTML = '<p>No hay películas disponibles</p>';
     } else {
@@ -90,7 +76,6 @@ function renderMovies(movies) {
         container.appendChild(card);
         container.appendChild(titleAndActions);
 
-        // Efectos hover
         card.addEventListener('mouseenter', () => {
           card.style.boxShadow = '0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(138,43,226,0.6)';
           card.style.transform = 'translateY(-5px) scale(1.02)';
@@ -100,7 +85,6 @@ function renderMovies(movies) {
           card.style.transform = 'translateY(0) scale(1)';
         });
 
-        // Acciones
         card.addEventListener('click', () => openMovieModal(movie));
         titleAndActions.querySelector('.edit-btn').addEventListener('click', e => {
           e.stopPropagation();
@@ -112,14 +96,9 @@ function renderMovies(movies) {
         });
       });
     }
-
-    // Forzamos reflow antes de quitar la clase para reiniciar la animación
     void container.offsetWidth;
-
-    // Quitamos la clase para hacer visible de nuevo
     container.classList.remove('fade-out');
-
-  }, 200); // 200ms = duración de la transición CSS
+  }, 200);
 }
 
 // ------- MODAL DETALLE ------
@@ -212,8 +191,10 @@ function openEditMovieModal(movie) {
     };
     try {
       await editMovie(movie.id, updated);
-      showModalMessage('Película modificada con éxito', 'success', () => displayMovies());
-      removeEditModal();
+      showModalMessage('Película modificada con éxito', 'success', () => {
+        removeEditModal();
+        displayMovies();
+      });
     } catch {
       showModalMessage('No se ha podido modificar la película', 'error');
     }
@@ -253,8 +234,10 @@ function openDeleteModal(movie) {
   document.querySelector('.do-delete-btn').onclick = async () => {
     try {
       await deleteMovie(movie.id);
-      showModalMessage('Película eliminada con éxito', 'success', () => displayMovies());
-      removeAllModals();
+      showModalMessage('Película eliminada con éxito', 'success', () => {
+        removeAllModals();
+        displayMovies();
+      });
     } catch {
       showModalMessage('No se ha podido eliminar la película', 'error');
     }
@@ -273,27 +256,31 @@ function showModalMessage(message, type = 'success', callback) {
   `, callback);
 }
 
+// Abajo está la clave: grid solo refresca cuando EL USUARIO cierra el modal
 function showModalHTML(contentHTML, callback) {
   removeAllModals();
   const overlay = document.createElement('div');
   overlay.className = 'movie-modal-overlay';
-  overlay.innerHTML = `<div class="movie-modal"><button class="modal-close" title="Cerrar">&times;</button>${contentHTML}</div>`;
+  overlay.innerHTML = `
+    <div class="movie-modal">
+      <button class="modal-close" title="Cerrar">&times;</button>
+      ${contentHTML}
+    </div>
+  `;
   document.body.appendChild(overlay);
   setTimeout(() => overlay.classList.add('show'), 10);
-  overlay.querySelector('.modal-close').onclick = () => {
+
+  function closeModalAndCallback() {
     overlay.remove();
     if (typeof callback === 'function') callback();
-  };
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      overlay.remove();
-      if (typeof callback === 'function') callback();
-    }
+  }
+  overlay.querySelector('.modal-close').onclick = closeModalAndCallback;
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModalAndCallback();
   });
   document.addEventListener('keydown', function escListener(e) {
     if (e.key === 'Escape') {
-      overlay.remove();
-      if (typeof callback === 'function') callback();
+      closeModalAndCallback();
       document.removeEventListener('keydown', escListener);
     }
   });
@@ -339,7 +326,7 @@ if (movieForm) {
   });
 }
 
-// ========== INTERFAZ Y EFECTOS EXTRA ==========
+// ========== RESTO: interfaz/efectos ==========
 function changeSkyColor() {
   currentSkyIndex = (currentSkyIndex + 1) % skyColors.length;
   const newGradient = `linear-gradient(to bottom, ${skyColors[currentSkyIndex]}, #845ec2)`;
