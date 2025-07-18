@@ -404,6 +404,87 @@ nav button:hover {
     .movie-card {height: 170px;}
   }
   
+  .movie-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  .movie-actions button {
+    padding: 0.45em 1.3em;
+    border-radius: 20px;
+    font-family: 'Orbitron', sans-serif;
+    border: none;
+    font-size: 1em;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    background: linear-gradient(45deg,#ffcc70,#ffc048,#ff9a9e);
+    color: #401a49;
+    box-shadow: 0 4px 15px rgba(255, 204, 112, 0.18);
+    transition: background 0.2s;
+    margin-right: 0.25rem;
+  }
+  .movie-actions button:hover {
+    background: #ff758c;
+    color: white;
+  }
+  .cancel-edit-btn {
+    margin-left: 1em;
+    margin-top: 0.5em;
+    background: #bbb;
+    color: #401a49;
+  }
+  
+  #app-message-modal .movie-modal { 
+    max-width: 360px; 
+    min-width: 200px; 
+    text-align: center;
+  }
+  #app-message-modal .modal-description {
+    background:rgba(255,255,255,0.12);
+    box-shadow: 0 2px 10px #ffcc7080;
+    color: #fff;
+    font-size: 1.1rem;
+    border-left:6px solid #ffcc70;
+  }
+/* Botones de acción en modales internos (editar, eliminar, cancelar) */
+.modal-actions-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.3em;
+    margin-top: 1.3em;
+  }
+  
+  .modal-action-btn {
+    padding: 0.65em 1.5em;
+    border-radius: 22px;
+    font-family: 'Orbitron', sans-serif;
+    border: none;
+    font-size: 1.05em;
+    cursor: pointer;
+    box-shadow: 0 2px 14px rgba(255,204,112,0.25);
+    background: linear-gradient(45deg,#ffcc70,#ff9a9e 70%);
+    color: #401a49;
+    font-weight: bold;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+  }
+  .modal-action-btn:hover {
+    background: linear-gradient(45deg,#fc5c65 70%,#ffcc70);
+    color: #fff;
+    transform: scale(1.07);
+  }
+  
+  /* Botón de confirmar eliminación más rojo */
+  .modal-delete-confirm {
+    background: linear-gradient(45deg,#fc5c65 70%,#ffcc70);
+    color: #fff !important;
+  }
+  .modal-delete-confirm:hover {
+    background: linear-gradient(45deg,#d7263d 90%,#ffcc70);
+    color: #fff !important;
+  }
+    
   
 
 /* ========================================

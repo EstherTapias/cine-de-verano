@@ -1,72 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>🎞Cine de Verano🌅🌊</title>
-    <link rel="stylesheet" href="style.css" />
-    <!-- Fuente Orbitron para el tema futurista -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎞Cine de Verano🌅🌊</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <!-- Encabezado principal con título y descripción -->
-    <header>
-        <h1>🎬 Cine de Verano 🌅🌊</h1>
-        <p id="header-desc">Películas para sentir, pensar... y olvidarnos del calor</p>
-        <!-- El botón Cambiar cielo se inserta aquí automáticamente vía JS -->
-    </header>
-    
-    <!-- Navegación con filtros de géneros -->
-    <nav class="genre-filters" id="genre-filters">
-        <button data-genre="all">Todos</button>
-        <button data-genre="Drama">Drama</button>
-        <button data-genre="Thriller">Thriller</button>
-        <button data-genre="Science Fiction">Ciencia Ficción</button>
-        <button data-genre="Psychological Thriller">Psicológico</button>
-    </nav>
+  <header>
+    <h1>🎬 Cine de Verano 🌅🌊</h1>
+    <p id="header-desc">Películas para sentir, pensar... y olvidarnos del calor</p>
+    <!-- El botón Cambiar cielo irá aquí (lo agrega JS) -->
+  </header>
+  
+  <!-- Filtros de género -->
+  <nav class="genre-filters" id="genre-filters">
+    <button data-genre="all">Todos</button>
+    <button data-genre="Drama">Drama</button>
+    <button data-genre="Thriller">Thriller</button>
+    <button data-genre="Science Fiction">Ciencia Ficción</button>
+    <button data-genre="Psychological Thriller">Psicológico</button>
+  </nav>
 
-    <!-- Escena de fondo animada con sol, océano y gaviotas -->
-    <div class="background-scene">
-        <div class="sun-wrapper">
-            <div class="sun" id="sun"></div>
-            <div class="sun-reflection"></div>
-        </div>
-        <div class="ocean"></div>
-        <div class="seagull seagull-1"></div>
-        <div class="seagull seagull-2"></div>
-        <div class="seagull seagull-3"></div>
+  <div class="background-scene">
+    <div class="sun-wrapper">
+      <div class="sun" id="sun"></div>
+      <div class="sun-reflection"></div>
     </div>
-        <!-- Sección del formulario para añadir nuevas películas -->
-        <section id="movie-form-container">
-            <button id="toggle-form">➕ Añadir nueva película</button>
-            <form id="movie-form" class="hidden">
-                <input type="text" name="title" placeholder="Título de la película" required />
-                <input type="text" name="director" placeholder="Director" />
-                <input type="number" name="release_year" placeholder="Año de estreno" />
-                <input type="text" name="genre" placeholder="Género" />
-                <textarea name="movie_description" placeholder="Descripción"></textarea>
-                <input type="text" name="poster_url" placeholder="URL del póster" />
-                <input type="text" name="trailer_url" placeholder="URL del tráiler" />
-                <button type="submit">🎬 Guardar película</button>
-            </form>
-        </section>
-    <!-- Contenido principal donde se muestran las películas -->
-    <main>
-        <section id="movie-list">
-            <!-- Las películas se insertarán dinámicamente aquí -->
-        </section>
-    </main>
+    <div class="ocean"></div>
+    <div class="seagull seagull-1"></div>
+    <div class="seagull seagull-2"></div>
+    <div class="seagull seagull-3"></div>
+  </div>
 
+  <!-- Formulario (se reutiliza para añadir y editar) -->
+  <section id="movie-form-container">
+    <button id="toggle-form">➕ Añadir nueva película</button>
+    <form id="movie-form" class="hidden">
+      <input type="text" name="title" placeholder="Título de la película" required />
+      <input type="text" name="director" placeholder="Director" />
+      <input type="number" name="release_year" placeholder="Año de estreno" />
+      <input type="text" name="genre" placeholder="Género" />
+      <textarea name="movie_description" placeholder="Descripción"></textarea>
+      <input type="text" name="poster_url" placeholder="URL del póster" />
+      <input type="text" name="trailer_url" placeholder="URL del tráiler" />
+      <button type="submit">🎬 Guardar película</button>
+    </form>
+  </section>
 
+  <main>
+    <section id="movie-list">
+      <!-- Películas cargadas dinámicamente aquí -->
+    </section>
+  </main>
 
-    <!-- Footer centrado correctamente -->
-    <footer>
-        <p>© 2025 Cine de Verano • Proyecto educativo</p>
-    </footer>
+  <footer>
+    <p>© 2025 Cine de Verano • Proyecto educativo</p>
+  </footer>
 
-    <!-- Scripts JavaScript -->
-    <script type="module" src="main.js"></script>
-
-
+  <script type="module" src="main.js"></script>
 </body>
 </html>
+    
