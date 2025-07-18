@@ -484,6 +484,42 @@ nav button:hover {
     background: linear-gradient(45deg,#d7263d 90%,#ffcc70);
     color: #fff !important;
   }
+
+  .site-footer {
+    background: linear-gradient(to right, #111, #222);
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 4rem;
+    font-size: 1rem;
+    border-top: 2px solid #ff00ff33;
+    box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.1);
+  }
+  
+  .site-footer p {
+    margin: 0 0 0.5rem 0;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .social-icons a {
+    color: #fff;
+    font-size: 1.5rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  
+  .social-icons a:hover {
+    color: #00ffff;
+    transform: scale(1.2);
+  }
+  
     
   
 
