@@ -1,5 +1,9 @@
 import { getMovies, addMovie, editMovie, deleteMovie } from './services.js';
 
+// --------- Estado global de filtro -----------
+let allMovies = [];
+let currentGenre = "all";
+
 const movieForm = document.getElementById('movie-form');
 const toggleFormButton = document.getElementById('toggle-form');
 const backgroundScene = document.querySelector('.background-scene');
@@ -9,20 +13,50 @@ let currentSkyIndex = 0;
 // ========== INICIALIZACIÓN ==========
 document.addEventListener('DOMContentLoaded', () => {
   displayMovies();
+  setupGenreFilters();
   initializeApp();
   setTimeout(applyMobileAdjustments, 100);
 });
 
-// ======= GRID DE CARDS =======
+// ========== MAIN LOAD Y FILTRO =============
+
 async function displayMovies() {
   try {
-    const movies = await getMovies();
-    renderMovies(movies);
+    allMovies = await getMovies();
+    renderMovies(getMoviesByActiveGenre());
   } catch (error) {
     showModalMessage('Error al cargar las películas. Inténtalo más tarde.', 'error');
   }
 }
 
+// Filtra películas donde CUALQUIERA de los géneros del campo coincida (case-insensitive, espacios limpios, varios separadores)
+function getMoviesByActiveGenre() {
+  if (currentGenre === "all") return allMovies;
+  return allMovies.filter(m => {
+    if (!m.genre) return false;
+    // Dividir por "/", ",", ";" o cualquier combinación ("Drama, Thriller/Acción;Psicológico…")
+    // Quita espacios y normaliza.
+    const genresArr = m.genre
+      .split(/[,\/;]+/) // divide por coma, barra, punto y coma
+      .map(g => g.trim().toLowerCase());
+    return genresArr.includes(currentGenre.trim().toLowerCase());
+  });
+}
+
+// ========== FILTROS NAV ==========
+function setupGenreFilters() {
+  const genreButtons = document.querySelectorAll('[data-genre]');
+  genreButtons.forEach(btn => {
+    btn.addEventListener('click', ev => {
+      currentGenre = ev.target.dataset.genre;
+      genreButtons.forEach(b => b.classList.remove('active'));
+      ev.target.classList.add('active');
+      renderMovies(getMoviesByActiveGenre());
+    });
+  });
+}
+
+// ========== GRID =============
 function renderMovies(movies) {
   const container = document.getElementById('movie-list');
   container.innerHTML = '';
@@ -71,7 +105,7 @@ function renderMovies(movies) {
   });
 }
 
-// ========== MODAL DETALLE ==========
+// ------- MODAL DETALLE ------
 function openMovieModal(movie) {
   removeAllModals();
   showModalHTML(`
@@ -105,7 +139,7 @@ function openMovieModal(movie) {
   `);
 }
 
-// ========== MODAL EDICIÓN ==========
+// ------- MODAL EDICIÓN -----
 function openEditMovieModal(movie) {
   removeAllModals();
   showModalHTML(`
@@ -177,7 +211,7 @@ function removeEditModal() {
   removeAllModals();
 }
 
-// ========== MODAL ELIMINAR ==========
+// ------- MODAL ELIMINAR -----
 function openDeleteModal(movie) {
   removeAllModals();
   showModalHTML(`
@@ -210,8 +244,7 @@ function openDeleteModal(movie) {
   };
 }
 
-// ========== MODAL INFORMACIÓN (éxito/error) ==========
-// Sólo ejecuta callback tras cerrar el modal de mensaje.
+// ------- MODAL INFORMATIVO ---------
 function showModalMessage(message, type = 'success', callback) {
   removeAllModals();
   showModalHTML(`
@@ -227,19 +260,13 @@ function showModalHTML(contentHTML, callback) {
   removeAllModals();
   const overlay = document.createElement('div');
   overlay.className = 'movie-modal-overlay';
-  overlay.innerHTML = `
-    <div class="movie-modal">
-      <button class="modal-close" title="Cerrar">&times;</button>
-      ${contentHTML}
-    </div>
-  `;
+  overlay.innerHTML = `<div class="movie-modal"><button class="modal-close" title="Cerrar">&times;</button>${contentHTML}</div>`;
   document.body.appendChild(overlay);
   setTimeout(() => overlay.classList.add('show'), 10);
-
-  overlay.querySelector('.modal-close').addEventListener('click', () => {
+  overlay.querySelector('.modal-close').onclick = () => {
     overlay.remove();
     if (typeof callback === 'function') callback();
-  });
+  };
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       overlay.remove();
@@ -295,7 +322,7 @@ if (movieForm) {
   });
 }
 
-// ========== EXTRA: filtros, fondo, etc. ==========
+// ========== INTERFAZ Y EFECTOS EXTRA ==========
 function changeSkyColor() {
   currentSkyIndex = (currentSkyIndex + 1) % skyColors.length;
   const newGradient = `linear-gradient(to bottom, ${skyColors[currentSkyIndex]}, #845ec2)`;
@@ -311,18 +338,6 @@ function createSkyToggleButton() {
   const desc = document.getElementById('header-desc');
   if (desc && desc.parentNode) desc.parentNode.insertBefore(skyToggleButton, desc.nextSibling);
 }
-function setupGenreFilters() {
-  const genreButtons = document.querySelectorAll('[data-genre]');
-  genreButtons.forEach(button => {
-    button.addEventListener('click', (event) => {
-      const selectedGenre = event.target.dataset.genre;
-      genreButtons.forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      filterMoviesByGenre(selectedGenre);
-    });
-  });
-}
-function filterMoviesByGenre(genre) { /* ... */ }
 function addParallaxEffect() {
   const sun = document.getElementById('sun');
   window.addEventListener('scroll', () => {
@@ -343,7 +358,6 @@ function addSeagullHoverEffect() {
   });
 }
 function initializeApp() {
-  setupGenreFilters();
   createSkyToggleButton();
   addParallaxEffect();
   addSeagullHoverEffect();
