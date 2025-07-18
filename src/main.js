@@ -59,50 +59,67 @@ function setupGenreFilters() {
 // ========== GRID =============
 function renderMovies(movies) {
   const container = document.getElementById('movie-list');
-  container.innerHTML = '';
-  if (!movies.length) {
-    container.innerHTML = '<p>No hay películas disponibles</p>';
-    return;
-  }
-  movies.forEach(movie => {
-    const card = document.createElement('article');
-    card.className = 'movie-card';
-    card.innerHTML = `
-      <div class="movie-poster">
-        <img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img"/>
-      </div>
-    `;
-    const titleAndActions = document.createElement('div');
-    titleAndActions.className = 'movie-title-under';
-    titleAndActions.innerHTML = `
-      <h3>${movie.title}</h3>
-      <div class="movie-actions">
-        <button class="edit-btn" data-id="${movie.id}">✏️ Editar</button>
-        <button class="delete-btn" data-id="${movie.id}">🗑 Eliminar</button>
-      </div>
-    `;
-    container.appendChild(card);
-    container.appendChild(titleAndActions);
 
-    card.addEventListener('mouseenter', () => {
-      card.style.boxShadow = '0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(138,43,226,0.6)';
-      card.style.transform = 'translateY(-5px) scale(1.02)';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
-      card.style.transform = 'translateY(0) scale(1)';
-    });
+  // Aplica clase de desvanecimiento
+  container.classList.add('fade-out');
 
-    card.addEventListener('click', () => openMovieModal(movie));
-    titleAndActions.querySelector('.edit-btn').addEventListener('click', e => {
-      e.stopPropagation();
-      openEditMovieModal(movie);
-    });
-    titleAndActions.querySelector('.delete-btn').addEventListener('click', e => {
-      e.stopPropagation();
-      openDeleteModal(movie);
-    });
-  });
+  // Esperamos al final de la transición para actualizar el contenido
+  setTimeout(() => {
+    container.innerHTML = '';
+
+    if (!movies.length) {
+      container.innerHTML = '<p>No hay películas disponibles</p>';
+    } else {
+      movies.forEach(movie => {
+        const card = document.createElement('article');
+        card.className = 'movie-card';
+        card.innerHTML = `
+          <div class="movie-poster">
+            <img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img"/>
+          </div>
+        `;
+        const titleAndActions = document.createElement('div');
+        titleAndActions.className = 'movie-title-under';
+        titleAndActions.innerHTML = `
+          <h3>${movie.title}</h3>
+          <div class="movie-actions">
+            <button class="edit-btn" data-id="${movie.id}">✏️ Editar</button>
+            <button class="delete-btn" data-id="${movie.id}">🗑 Eliminar</button>
+          </div>
+        `;
+        container.appendChild(card);
+        container.appendChild(titleAndActions);
+
+        // Efectos hover
+        card.addEventListener('mouseenter', () => {
+          card.style.boxShadow = '0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(138,43,226,0.6)';
+          card.style.transform = 'translateY(-5px) scale(1.02)';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+          card.style.transform = 'translateY(0) scale(1)';
+        });
+
+        // Acciones
+        card.addEventListener('click', () => openMovieModal(movie));
+        titleAndActions.querySelector('.edit-btn').addEventListener('click', e => {
+          e.stopPropagation();
+          openEditMovieModal(movie);
+        });
+        titleAndActions.querySelector('.delete-btn').addEventListener('click', e => {
+          e.stopPropagation();
+          openDeleteModal(movie);
+        });
+      });
+    }
+
+    // Forzamos reflow antes de quitar la clase para reiniciar la animación
+    void container.offsetWidth;
+
+    // Quitamos la clase para hacer visible de nuevo
+    container.classList.remove('fade-out');
+
+  }, 200); // 200ms = duración de la transición CSS
 }
 
 // ------- MODAL DETALLE ------
