@@ -1,1097 +1,873 @@
-/* ========================================
-   RESETEO GLOBAL Y CONFIGURACIÓN BASE
-========================================= */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ========= RESETEO GLOBAL Y CONFIGURACIÓN BASE ========= */
+*,                                         /* Selector universal: todos los elementos */
+*::before,                                 /* Selector para pseudo-elemento before */
+*::after {                                 /* Selector para pseudo-elemento after */
+  box-sizing: border-box;                  /* Incluye border y padding en el tamaño */
+  margin: 0;                               /* Elimina márgenes por defecto */
+  padding: 0;                              /* Elimina padding por defecto */
 }
-body {
-  overflow-x: hidden;
-  font-family: 'Orbitron', sans-serif;
-  min-height: 100vh;
+
+body {                                    /* Reglas del body principal */
+  overflow-x: hidden;                     /* Oculta scroll horizontal */
+  font-family: 'Orbitron', sans-serif;    /* Cambia fuente a Orbitron */
+  min-height: 100vh;                      /* Alto mínimo igual a la ventana */
 }
-/* ========================================
-   ESCENA DE FONDO ANIMADA
-========================================= */
-.background-scene {
-    position: fixed;
-    top: 0; 
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(to bottom, #ffa17f, #f8a5c2, #845ec2);
-    transition: background 2s ease;
-    overflow: hidden;
-    z-index: -1;
+
+/* ========= ESCENA DE FONDO ANIMADA ========= */
+.background-scene {                        /* Fondo animado fijo */
+  position: fixed;                         /* Lo fija al viewport */
+  top: 0;                                  /* Arriba */
+  left: 0;                                 /* Izquierda */
+  width: 100vw;                            /* Ocupa ancho ventana */
+  height: 100vh;                           /* Ocupa alto ventana */
+  background: linear-gradient(to bottom, #ffa17f, #f8a5c2, #845ec2); /* Degradado de fondo */
+  transition: background 2s ease;          /* Efecto de transición del fondo */
+  overflow: hidden;                        /* Oculta desbordes */
+  z-index: -1;                             /* Detrás del resto */
 }
-.sky-evening {
-    background: linear-gradient(to bottom, #ff9a9e, #fad0c4, #fad0c4);
+
+.sky-evening {                             /* Variante de fondo: atardecer */
+  background: linear-gradient(to bottom, #ff9a9e, #fad0c4, #fad0c4);
 }
-/* ========================================
-   SOL Y ELEMENTOS CELESTES
-========================================= */
-.sun-wrapper {
-    position: absolute;
-    bottom: 25vh;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 100px;
-    overflow: visible;
-    z-index: 1;
+
+/* ========= SOL Y ELEMENTOS CELESTES ========= */
+.sun-wrapper {                             /* Contenedor del sol */
+  position: absolute;                      /* Posición absoluta en contenedor */
+  bottom: 25vh;                            /* Distancia desde abajo de vista */
+  left: 50%;                               /* Centrado horizontal */
+  transform: translateX(-50%);             /* Corrige el centro */
+  width: 200px;                            /* Ancho del sol */
+  height: 100px;                           /* Alto del sol */
+  overflow: visible;                       /* Deja ver efectos fuera del box */
+  z-index: 1;                              /* Encima del fondo */
 }
-.sun {
-    width: 200px;
-    height: 100px;
-    border-top-left-radius: 100px;
-    border-top-right-radius: 100px;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(255, 224, 102, 0.5),
-      rgba(255, 224, 102, 0.5) 8px,
-      transparent 8px,
-      transparent 16px
-    );
-    box-shadow: 0 0 60px rgba(255, 212, 59, 0.4);
-    backdrop-filter: blur(2px);
-    animation: sunset 20s infinite alternate ease-in-out;
-    position: relative;
+
+.sun {                                    /* El "sol" */
+  width: 200px;                           /* Ancho del sol */
+  height: 100px;                          /* Alto */
+  border-top-left-radius: 100px;           /* Bordes redondeados arriba izquierda */
+  border-top-right-radius: 100px;          /* Bordes redondeados arriba derecha */
+  background: repeating-linear-gradient(    /* Rayos solares con gradiente */
+    to bottom,
+    rgba(255, 224, 102, 0.5),
+    rgba(255, 224, 102, 0.5) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  box-shadow: 0 0 60px rgba(255, 212, 59, 0.4); /* Sombra brillo alrededor */
+  backdrop-filter: blur(2px);                    /* Difumina detrás */
+  animation: sunset 20s infinite alternate ease-in-out; /* Animación subida/bajada */
+  position: relative;                            /* Contexto relativo */
 }
+
+/* Animación de subida/bajada del sol */
 @keyframes sunset {
-    from { transform: translateY(0);}
-    to   { transform: translateY(20px);}
+  from { transform: translateY(0); }            /* Inicio: sin mover */
+  to { transform: translateY(20px); }           /* Fin: baja 20px */
 }
-/* ========================================
-   OCÉANO
-========================================= */
-.ocean {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 25vh;
-    background: linear-gradient(to top, #00b4d8, transparent);
+
+/* ========= OCÉANO ========== */
+.ocean {                                        /* Océano azul fijo abajo */
+  position: absolute;                           /* Absoluta desde contenedor */
+  bottom: 0;                                    /* Pega al fondo */
+  left: 0;                                      /* Pega a la izquierda */
+  width: 100%;                                  /* Ocupa todo el ancho */
+  height: 25vh;                                 /* Ocupa 25% del alto ventana */
+  background: linear-gradient(to top, #00b4d8, transparent); /* Degradado azul hacia arriba */
 }
-/* ========================================
-   GAVIOTAS ANIMADAS
-========================================= */
-.seagull {
-    position: absolute;
-    width: 3rem;
-    height: 3rem;
-    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M2 34c8-8 20-8 30 0 10-8 22-8 30 0" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/></svg>');
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: 0.5;
-    animation: fly 12s linear infinite;
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+
+/* ========= GAVIOTAS ANIMADAS ========== */
+.seagull {                                      /* Estilo base para las gaviotas */
+  position: absolute;                           /* Permite animarlas libremente */
+  width: 3rem;                                  /* Ancho fijo */
+  height: 3rem;                                 /* Alto fijo */
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M2 34c8-8 20-8 30 0 10-8 22-8 30 0" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/></svg>'); /* Imagen SVG de gaviota */
+  background-size: contain;                     /* Que el SVG no se distorsione */
+  background-repeat: no-repeat;                 /* No repite el fondo */
+  opacity: 0.5;                                /* Transparencia parcial */
+  animation: fly 12s linear infinite;          /* Efecto de vuelo continuo */
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3)); /* Sombra leve blanca */
 }
-.seagull-1 { top: 15%; left: -10%; animation-delay: 0s; }
-.seagull-2 { top: 20%; left: -20%; animation-delay: 4s; }
-.seagull-3 { top: 25%; left: -30%; animation-delay: 8s; }
+
+.seagull-1 { top: 15%; left: -10%; animation-delay: 0s; }    /* Primer gaviota: diferente inicio */
+.seagull-2 { top: 20%; left: -20%; animation-delay: 4s; }    /* Segunda: más abajo y después */
+.seagull-3 { top: 25%; left: -30%; animation-delay: 8s; }    /* Tercera: aún más bajo y más tarde */
+
+/* Animación para que las gaviotas vuelen de izquierda a derecha */
 @keyframes fly {
-    0%   {transform: translateX(0)      translateY(0);}
-    25%  {transform: translateX(30vw)   translateY(-5px);}
-    50%  {transform: translateX(60vw)   translateY(-10px);}
-    75%  {transform: translateX(90vw)   translateY(-5px);}
-    100% {transform: translateX(120vw)  translateY(0);}
+  0% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(30vw) translateY(-5px); }
+  50% { transform: translateX(60vw) translateY(-10px); }
+  75% { transform: translateX(90vw) translateY(-5px); }
+  100% { transform: translateX(120vw) translateY(0); }
 }
-/* ========================================
-   BOTÓN CON GRADIENTE CAMBIANTE AL HOVER
-========================================= */
-#colorChangeBtn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 15px;
-  border-radius: 50px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.9rem;
-  min-width: 120px;
-  text-align: center;
-  z-index: 50;
-  cursor: pointer;
-  color: #401a49;
-  border: none;
-  background: linear-gradient(270deg, #ffcc70, #f9b64d, #ffaa00, #ffcc70);
-  background-size: 600% 600%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-  animation: none;
+
+/* ========= BOTONES PRINCIPALES ========= */
+#colorChangeBtn {                              /* Botón flotante de color */
+  position: fixed;                             /* Siempre visible */
+  top: 20px;                                   /* 20px del borde superior */
+  right: 20px;                                 /* 20px del borde derecho */
+  padding: 10px 15px;                          /* Espaciado interno */
+  border-radius: 50px;                         /* Borde redondo */
+  font-family: 'Orbitron', sans-serif;         /* Fuente */
+  font-size: 0.9rem;                           /* Letra pequeña */
+  min-width: 120px;                            /* Ancho mínimo */
+  text-align: center;                          /* Texto centrado */
+  z-index: 50;                                 /* Por encima del fondo */
+  cursor: pointer;                             /* Cambia a mano */
+  color: #401a49;                              /* Color de texto */
+  border: none;                                /* Sin borde */
+  background: linear-gradient(270deg, #ffcc70, #f9b64d, #ffaa00, #ffcc70); /* Degradado animable */
+  background-size: 600% 600%;                  /* Ajuste para gradiente animado */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);   /* Sombra leve */
+  transition: transform 0.3s ease;             /* Escalado suave al hover */
+  animation: none;                             /* Sin animación por defecto */
 }
+
+/* Hover para animación del gradiente y escalado */
 #colorChangeBtn:hover {
-  animation: animatedGradient 5s ease infinite;
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(255, 204, 112, 0.4);
-}
-/* Solo animación gradiente */
-@keyframes animatedGradient {
-  0% {background-position: 0% 50%;}
-  50%{background-position: 100% 50%;}
-  100%{background-position: 0% 50%;}
+  animation: animatedGradient 5s ease infinite;/* Gradiente animado */
+  transform: scale(1.05);                      /* Escalado levemente mayor */
+  box-shadow: 0 6px 20px rgba(255, 204, 112, 0.4); /* Sombra más intensa */
 }
 
-/* ========================================
-   BOTÓN CAMBIAR CIELO (sky-toggle-btn)
-========================================= */
+@keyframes animatedGradient {                  /* Animación para fondo del botón */
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Botón para alternar entre cielos/fondos */
 #sky-toggle-btn {
-  background-color: #ffcc70;
-  color: #401a49;
-  border: none;
-  padding: 0.45rem 1rem;
-  font-size: 0.95rem;
-  border-radius: 25px;
-  cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
-  box-shadow: 0 0 8px #ffcc70;
-  transition: background 0.3s ease, transform 0.2s ease;
-  z-index: 10;
-  margin: 1.2rem auto 0.6rem auto;
-  display: block;
-  min-width: 110px;
-  max-width: 220px;
+  background-color: #ffcc70;                   /* Amarillo claro */
+  color: #401a49;                              /* Letras violeta oscuro */
+  border: none;                                /* Sin borde */
+  padding: 0.45rem 1rem;                       /* Padding horizontal y vertical */
+  font-size: 0.95rem;                          /* Letra mediana */
+  border-radius: 25px;                         /* Borde semi redondo */
+  cursor: pointer;                             /* Mano */
+  font-family: 'Orbitron', sans-serif;         /* Fuente */
+  box-shadow: 0 0 8px #ffcc70;                 /* Sombra amarilla */
+  transition: background 0.3s ease, transform 0.2s ease; /* Efectos hover */
+  z-index: 10;                                 /* Sobre fondo, bajo modales */
+  margin: 1.2rem auto 0.6rem auto;             /* Centrado y espaciado vertical */
+  display: block;                              /* Ocupa ancho completo de caja */
+  min-width: 110px;                            /* Ancho mínimo */
+  max-width: 220px;                            /* Ancho máximo */
 }
+
 #sky-toggle-btn:hover {
-  background-color: #ffc048;
-  transform: scale(1.05);
+  background-color: #ffc048;                   /* Amarillo más fuerte al pasar mouse */
+  transform: scale(1.05);                      /* Escalado leve */
 }
-/* Responsive sky-toggle-btn */
-@media (max-width: 768px) {
-  #sky-toggle-btn {
-      padding: 0.35rem 0.9rem;
-      font-size: 0.85rem;
-  }
+
+/* ========= ENCABEZADO Y NAVEGACIÓN ========= */
+header {                                      /* Encabezado principal */
+  padding: 2rem 1rem 0 1rem;                  /* Padding arriba y laterales */
+  padding-top: 4rem;                          /* Aumenta espacio superior */
+  text-align: center;                         /* Centra todo el contenido */
+  color: #fff9e6;                             /* Color texto */
+  font-family: 'Orbitron', sans-serif;        /* Fuente */
+  text-shadow: 0 0 10px #ffcc70, 0 0 20px #ffaa00; /* Sombra resplandor */
 }
-@media (max-width: 480px) {
-  #sky-toggle-btn {
-      padding: 0.3rem 0.75rem;
-      font-size: 0.75rem;
-  }
-}
-/* ========================================
-   ENCABEZADO Y NAVEGACIÓN
-========================================= */
-header {
-    padding: 2rem 1rem 0 1rem;
-    padding-top: 4rem;
-    text-align: center;
-    color: #fff9e6;
-    font-family: 'Orbitron', sans-serif;
-    text-shadow: 0 0 10px #ffcc70, 0 0 20px #ffaa00;
-}
+
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+  font-size: 2.5rem;                          /* Título muy grande */
+  margin-bottom: 1rem;                        /* Margen inferior */
 }
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    padding: 1rem;
+
+nav {                                         /* Barra de navegación */
+  display: flex;                              /* Flexbox para disposición horiz */
+  justify-content: center;                    /* Centrado horizontal */
+  gap: 1rem;                                  /* Separación entre botones */
+  flex-wrap: wrap;                            /* Permite bajar línea botones */
+  padding: 1rem;                              /* Espaciado interno */
 }
-nav button {
-    background: transparent;
-    border: 2px solid #ffcc70;
-    color: #ffcc70;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 10;
+
+nav button {                                  /* Botones del nav */
+  background: transparent;                    /* Sin fondo */
+  border: 2px solid #ffcc70;                  /* Borde amarillo claro */
+  color: #ffcc70;                             /* Texto amarillo claro */
+  padding: 0.5rem 1rem;                       /* Espaciado interno */
+  border-radius: 20px;                        /* Bordes redondeados */
+  font-family: inherit;                       /* Hereda fuente de nav */
+  cursor: pointer;                            /* Mano */
+  transition: all 0.3s ease;                  /* Transición completa suave */
+  z-index: 10;                                /* Encima fondo */
 }
+
 nav button:hover {
-    background: #ffcc70;
-    color: #401a49;
-    box-shadow: 0 0 10px #ffcc70;
-}
-/* ========================================
-   ESTILOS MEJORADOS PARA CARDS EXPANDIBLES
-========================================= */
-
-/* Contenedor principal de las cards - Grid responsive */
-#movie-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    margin-top: 2rem;
-    color: #ffffff;
-    z-index: 5;
-    position: relative;
-    justify-content: center;
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
+  background: #ffcc70;                        /* Fondo amarillo claro */
+  color: #401a49;                             /* Texto violeta oscuro */
+  box-shadow: 0 0 10px #ffcc70;               /* Sombra especial */
 }
 
-/* Estilo individual de cada card - Vista compacta por defecto */
-.movie-card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 0; /* Sin padding inicial para la imagen */
-    
-    /* Sombra suave dorada */
-    box-shadow: 
-        0 8px 32px rgba(255, 204, 112, 0.1),
-        0 2px 8px rgba(0, 0, 0, 0.1);
-    
-    border: 1px solid rgba(255, 204, 112, 0.2);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    display: flex;
-    flex-direction: column;
-    height: 420px; /* Altura fija para vista compacta */
-    
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    
-    /* Transformación inicial */
-    transform: scale(1);
+/* ========= GRID DE PELÍCULAS ========= */
+#movie-list {                                 /* Contenedor de películas en grid */
+  display: grid;                              /* Usa grid CSS */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Columnas responsivas */
+  gap: 2rem 1rem;                             /* Espacio filas/columnas */
+  padding: 2rem;                              /* Espacio interno */
+  margin-top: 2rem;                           /* Margen arriba */
+  color: #ffffff;                             /* Texto blanco */
+  z-index: 5;                                 /* Encima fondo */
+  position: relative;                         /* Para hijos absolutos */
+  justify-content: center;                    /* Centra items horizontalmente */
+  max-width: 1400px;                          /* Ancho máximo del grid */
+  margin-left: auto;                          /* Centrado horizontal */
+  margin-right: auto;                         /* Centrado horizontal */
+  opacity: 1;                                 /* Opacidad total inicial */
+  transition: opacity 0.3s ease-in-out;       /* Efecto suave al mostrar/ocultar */
+  min-height: 100px;                          /* Evita colapso sin tarjetas */
 }
 
-/* Efecto hover mejorado con neón */
-.movie-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    
-    /* Sombra neón intensa */
-    box-shadow: 
-        0 0 30px rgba(255, 204, 112, 0.6),
-        0 0 60px rgba(255, 204, 112, 0.4),
-        0 0 90px rgba(255, 204, 112, 0.2),
-        0 12px 40px rgba(0, 0, 0, 0.2);
-    
-    /* Borde neón */
-    border-color: rgba(255, 204, 112, 0.8);
-    
-    /* Brillo interno más intenso */
-    background: rgba(255, 255, 255, 0.15);
+#movie-list.fade-out {                        /* Estado fade para transiciones */
+  opacity: 0;                                 /* Invisibilidad */
+  pointer-events: none;                       /* No interactuable */
 }
 
-/* Imagen del póster */
+/* ========= CARDS DE PELÍCULAS ========= */
+.movie-card {                                 /* Tarjeta visual de cada película */
+  background: rgba(255, 255, 255, 0.08);      /* Glassmorfismo suave */
+  backdrop-filter: blur(10px);                /* Difuminado tipo cristal */
+  border-radius: 20px;                        /* Bordes redondos */
+  box-shadow: 0 8px 32px rgba(255, 204, 112, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra doble */
+  border: 1px solid rgba(255, 204, 112, 0.2); /* Borde semi-transparente */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Suaviza cualquier cambio */
+  overflow: hidden;                           /* Oculta cualquier desborde */
+  cursor: pointer;                            /* Manito al pasar */
+  padding: 0;                                 /* Sin padding */
+  height: 320px;                              /* Alto fijo */
+  display: flex;                              /* Flex para disposición interna */
+  align-items: stretch;                       /* Estira contenido interior */
+  justify-content: center;                    /* Centrado interior */
+  transform: scale(1);                        /* Sin escalado por defecto */
+}
+
+.movie-card:hover {                           /* Hover para resaltar la tarjeta */
+  transform: translateY(-8px) scale(1.02);    /* Sube y escala ligeramente */
+  box-shadow:
+    0 0 30px rgba(255, 204, 112, 0.6),
+    0 0 60px rgba(255, 204, 112, 0.4),
+    0 0 90px rgba(255, 204, 112, 0.2),
+    0 12px 40px rgba(0, 0, 0, 0.2);           /* Sombra compuesta */
+  border-color: rgba(255, 204, 112, 0.8);     /* Borde más llamativo */
+  background: rgba(255, 255, 255, 0.15);      /* Fondo más claro */
+}
+
+/* Zona de la portada en la tarjeta */
 .movie-poster {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 20px 20px 0 0;
-    transition: all 0.3s ease;
+  width: 100%;                               /* Ocupa todo el ancho */
+  height: 100%;                              /* Todo el alto */
+  border-radius: inherit;                    /* Hereda redondeo */
+  overflow: hidden;                          /* No desborda */
+  background: #18181b;                       /* Fondo oscuro por defecto */
+  display: flex;                             /* Centrado flex */
+  align-items: center;                       /* Centrado vertical */
+  justify-content: center;                   /* Centrado horizontal */
+  transition: all 0.3s ease;                 /* Suave transición */
 }
 
-/* Contenido básico visible (título) */
-.movie-basic-info {
-    padding: 1rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
+.movie-poster-img {
+  width: 100%;                              /* Imagen ocupa todo el ancho */
+  height: 100%;                             /* Todo el alto */
+  object-fit: cover;                        /* Recorta imagen si es necesario */
+  object-position: center;                  /* Centra recorte */
+  display: block;                           /* Elimina espacio extra imagen */
 }
 
-/* Título de la película */
-.movie-card h3 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    color: #fff9e6;
-    text-shadow: 0 0 8px rgba(255, 204, 112, 0.4);
-    line-height: 1.3;
-    margin: 0;
-    word-wrap: break-word;
-    max-height: 3.9rem; /* Máximo 3 líneas */
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+/* Zona debajo de la imagen con el título */
+.movie-title-under {
+  width: 100%;                              /* Todo el ancho */
+  text-align: center;                       /* Centrado horizontal */
+  margin-top: 0.5rem;                       /* Separado arriba */
+  margin-bottom: 1rem;                      /* Separado abajo */
 }
-.movie-poster {
-    width: 100%;
-    height: 300px;
-    border-radius: 20px 20px 0 0;
-    overflow: hidden; /* clave para que la imagen no se salga */
-    background: #18181b; /* color de fondo de seguridad para posters en PNG / transparentes */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-  .movie-poster-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 0; /* ya lo controla el contenedor */
-    display: block;
-    background: #18181b;
-  }
-  /* Card de la película (solo imagen) */
-.movie-card {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(255, 204, 112, 0.1), 0 2px 8px rgba(0,0,0,0.1);
-    border: 1px solid rgba(255, 204, 112, 0.2);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-    cursor: pointer;
-    padding: 0;
-    height: 320px;
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-  }
-  
-  /* Imagen debería rellenar toda la card */
-  .movie-poster {
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    overflow: hidden;
-    background: #18181b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .movie-poster-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-  
-  /* Título debajo de la card */
-  .movie-title-under {
-    width: 100%;
-    text-align: center;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  .movie-title-under h3 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    color: #fff9e6;
-    text-shadow: 0 0 8px rgba(255, 204, 112, 0.4);
-    margin: 0;
-    line-height: 1.3;
-    letter-spacing: 0.5px;
-    display: inline-block;
-    background: rgba(0,0,0,0.30);
-    padding: 0.3em 1.1em;
-    border-radius: 16px;
-  }
-  
-  
-  /* Grid para que cada card+title sea una columna */
-  #movie-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem 1rem;
-    padding: 2rem;
-  }
-  
-  @media (max-width: 768px) {
-    .movie-card {height: 220px;}
-    .movie-title-under h3{font-size:1rem;}
-  }
-  
-  @media (max-width: 480px) {
-    .movie-card {height: 170px;}
-  }
-  
-  .movie-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1.2rem;
-    margin-top: 0.5rem;
-  }
-  .movie-actions button {
-    padding: 0.45em 1.3em;
-    border-radius: 20px;
-    font-family: 'Orbitron', sans-serif;
-    border: none;
-    font-size: 1em;
-    font-weight: 500;
-    letter-spacing: 1px;
-    cursor: pointer;
-    background: linear-gradient(45deg,#ffcc70,#ffc048,#ff9a9e);
-    color: #401a49;
-    box-shadow: 0 4px 15px rgba(255, 204, 112, 0.18);
-    transition: background 0.2s;
-    margin-right: 0.25rem;
-  }
-  .movie-actions button:hover {
-    background: #ff758c;
-    color: white;
-  }
-  .cancel-edit-btn {
-    margin-left: 1em;
-    margin-top: 0.5em;
-    background: #bbb;
-    color: #401a49;
-  }
-  
-  #app-message-modal .movie-modal { 
-    max-width: 360px; 
-    min-width: 200px; 
-    text-align: center;
-  }
-  #app-message-modal .modal-description {
-    background:rgba(255,255,255,0.12);
-    box-shadow: 0 2px 10px #ffcc7080;
-    color: #fff;
-    font-size: 1.1rem;
-    border-left:6px solid #ffcc70;
-  }
-/* Botones de acción en modales internos (editar, eliminar, cancelar) */
-.modal-actions-row {
-    display: flex;
-    justify-content: center;
-    gap: 1.3em;
-    margin-top: 1.3em;
-  }
-  
-  .modal-action-btn {
-    padding: 0.65em 1.5em;
-    border-radius: 22px;
-    font-family: 'Orbitron', sans-serif;
-    border: none;
-    font-size: 1.05em;
-    cursor: pointer;
-    box-shadow: 0 2px 14px rgba(255,204,112,0.25);
-    background: linear-gradient(45deg,#ffcc70,#ff9a9e 70%);
-    color: #401a49;
-    font-weight: bold;
-    transition: background 0.15s, color 0.15s, transform 0.1s;
-  }
-  .modal-action-btn:hover {
-    background: linear-gradient(45deg,#fc5c65 70%,#ffcc70);
-    color: #fff;
-    transform: scale(1.07);
-  }
-  
-  /* Botón de confirmar eliminación más rojo */
-  .modal-delete-confirm {
-    background: linear-gradient(45deg,#fc5c65 70%,#ffcc70);
-    color: #fff !important;
-  }
-  .modal-delete-confirm:hover {
-    background: linear-gradient(45deg,#d7263d 90%,#ffcc70);
-    color: #fff !important;
-  }
-    
-  
 
-/* ========================================
-   MODAL EXPANDIDO - OVERLAY
-========================================= */
+.movie-title-under h3 {
+  font-family: 'Orbitron', sans-serif;      /* Fuente especial */
+  font-size: 1.2rem;                        /* Letra grande */
+  color: #fff9e6;                           /* Color claro */
+  text-shadow: 0 0 8px rgba(255, 204, 112, 0.4); /* Sombra suave */
+  margin: 0;                                /* Sin margen extra */
+  line-height: 1.3;                         /* Altura de línea compacta */
+  letter-spacing: 0.5px;                    /* Espacio entre letras */
+  display: inline-block;                    /* Tamaño mínimo necesario */
+  background: rgba(0, 0, 0, 0.30);          /* Fondo oscuro translúcido */
+  padding: 0.3em 1.1em;                     /* Padding interno texto */
+  border-radius: 16px;                      /* Bordes redondeados */
+}
 
+/* Zona de botones debajo del título */
+.movie-actions {
+  display: flex;                             /* Flexbox para los botones */
+  justify-content: center;                   /* Centrado horizontal */
+  gap: 1.2rem;                               /* Espacio entre ellos */
+  margin-top: 0.5rem;                        /* Separado arriba */
+}
+
+.movie-actions button {
+  padding: 0.45em 1.3em;                     /* Espaciado interno */
+  border-radius: 20px;                       /* Redondez */
+  font-family: 'Orbitron', sans-serif;       /* Fuente */
+  border: none;                              /* Sin borde propio */
+  font-size: 1em;                            /* Tamaño estándar */
+  font-weight: 500;                          /* Semi-bold */
+  letter-spacing: 1px;                       /* Separación entre letras */
+  cursor: pointer;                           /* Mano */
+  background: linear-gradient(45deg, #ffcc70, #ffc048, #ff9a9e); /* Degradado suave */
+  color: #401a49;                            /* Violeta oscuro */
+  box-shadow: 0 4px 15px rgba(255, 204, 112, 0.18); /* Sombra ligera */
+  transition: background 0.2s;               /* Suave transición de color */
+  margin-right: 0.25rem;                     /* Espaciado entre ellos */
+}
+
+.movie-actions button:hover {
+  background: #ff758c;                       /* Fondo rosa al pasar mouse */
+  color: white;                              /* Texto blanco */
+}
+
+/* Botón de cancelar edición */
+.cancel-edit-btn {
+  margin-left: 1em;                          /* Separación a la izquierda */
+  margin-top: 0.5em;                         /* Separación arriba */
+  background: #bbb;                          /* Fondo gris */
+  color: #401a49;                            /* Texto violeta */
+}
+
+/* ========= MODAL OVERLAY ========= */
 .movie-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
+  position: fixed;                           /* Fijo encima de todo */
+  top: 0;
+  left: 0;
+  width: 100vw;                              /* Ocupa todo el viewport */
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);            /* Fondo negro translúcido */
+  backdrop-filter: blur(5px);                /* Difuminado detrás */
+  z-index: 1000;                             /* Muy encima */
+  display: flex;                             /* Flex para centrar interior */
+  align-items: center;                       /* Centrado vertical */
+  justify-content: center;                   /* Centrado horizontal */
+  opacity: 0;                                /* Oculto por defecto */
+  visibility: hidden;
+  transition: all 0.3s ease;
 }
 
+/* Mostrar el modal overlay */
 .movie-modal-overlay.show {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
-/* Contenedor del modal */
+/* Modal de detalle de película */
 .movie-modal {
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(20px);
-    border-radius: 25px;
-    padding: 0;
-    max-width: 800px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    border: 2px solid rgba(255, 204, 112, 0.3);
-    
-    /* Sombra neón para el modal */
-    box-shadow: 
-        0 0 40px rgba(255, 204, 112, 0.4),
-        0 0 80px rgba(255, 204, 112, 0.2);
-    
-    /* Animación de entrada */
-    transform: scale(0.8) translateY(50px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 0;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  border: 2px solid rgba(255, 204, 112, 0.3);
+  box-shadow: 
+    0 0 40px rgba(255, 204, 112, 0.4),
+    0 0 80px rgba(255, 204, 112, 0.2);
+  transform: scale(0.8) translateY(50px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Animar la entrada del modal */
 .movie-modal-overlay.show .movie-modal {
-    transform: scale(1) translateY(0);
+  transform: scale(1) translateY(0);
 }
 
-/* Botón de cerrar */
+/* Mensajes modales compactos */
+#app-message-modal .movie-modal { 
+  max-width: 360px; 
+  min-width: 200px; 
+  text-align: center;
+}
+
+/* Mensaje destacado en modal de aviso */
+#app-message-modal .modal-description {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 10px #ffcc7080;
+  color: #fff;
+  font-size: 1.1rem;
+  border-left: 6px solid #ffcc70;
+}
+
+/* Botón cerrar modal */
 .modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 107, 107, 0.2);
-    border: 2px solid rgba(255, 107, 107, 0.4);
-    color: #ff9999;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    z-index: 1001;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 107, 107, 0.2);
+  border: 2px solid rgba(255, 107, 107, 0.4);
+  color: #ff9999;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  z-index: 1001;
 }
 
+/* Efecto hover cerrar */
 .modal-close:hover {
-    background: rgba(255, 107, 107, 0.4);
-    transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+  background: rgba(255, 107, 107, 0.4);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
 }
 
-/* Layout del modal */
+/* Contenido del modal de película (poster + info) */
 .modal-content {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 2rem;
-    padding: 2rem;
-    min-height: 400px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  min-height: 400px;
 }
 
-/* Imagen en el modal */
+/* Imagen de póster en modal detalle */
 .modal-poster {
-    width: 100%;
-    height: 450px;
-    object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  height: 450px;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #18181b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Información detallada */
+.modal-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 0;
+}
+
 .modal-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    color: #fff9e6;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #fff9e6;
 }
 
 .modal-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2rem;
-    color: #fff9e6;
-    text-shadow: 0 0 12px rgba(255, 204, 112, 0.5);
-    margin: 0 0 1rem 0;
-    line-height: 1.2;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #fff9e6;
+  text-shadow: 0 0 12px rgba(255, 204, 112, 0.5);
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
 }
 
-/* Información básica en grid */
+/* Info clave: año, género, etc */
 .modal-basic-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .info-item {
-    background: rgba(255, 204, 112, 0.1);
-    padding: 0.8rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 204, 112, 0.2);
-    text-align: center;
+  background: rgba(255, 204, 112, 0.1);
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 204, 112, 0.2);
+  text-align: center;
 }
 
 .info-label {
-    font-size: 0.8rem;
-    color: #e6d7c3;
-    margin-bottom: 0.3rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  font-size: 0.8rem;
+  color: #e6d7c3;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .info-value {
-    font-size: 1rem;
-    color: #ffcc70;
-    font-weight: bold;
-    font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  color: #ffcc70;
+  font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
 }
 
-/* Descripción */
 .modal-description {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1.5rem;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 204, 112, 0.1);
-    line-height: 1.6;
-    font-size: 0.95rem;
-    color: #f0e6d6;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 204, 112, 0.1);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #f0e6d6;
 }
 
-/* Reparto */
 .modal-cast {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 .cast-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    color: #ffcc70;
-    margin-bottom: 0.5rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  color: #ffcc70;
+  margin-bottom: 0.5rem;
 }
 
 .cast-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .cast-member {
-    background: rgba(255, 204, 112, 0.15);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: #e6d7c3;
-    border: 1px solid rgba(255, 204, 112, 0.2);
+  background: rgba(255, 204, 112, 0.15);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #e6d7c3;
+  border: 1px solid rgba(255, 204, 112, 0.2);
 }
 
-/* Botón de tráiler */
+/* Botón para ver tráiler de la película */
 .trailer-button {
-    background: linear-gradient(45deg, #ffcc70, #ff9a9e);
-    color: #401a49;
-    border: none;
-    padding: 0.8rem 2rem;
-    border-radius: 25px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(255, 204, 112, 0.3);
+  background: linear-gradient(45deg, #ffcc70, #ff9a9e);
+  color: #401a49;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(255, 204, 112, 0.3);
 }
 
 .trailer-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 204, 112, 0.5);
-    background: linear-gradient(45deg, #ffc048, #ff758c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 204, 112, 0.5);
+  background: linear-gradient(45deg, #ffc048, #ff758c);
 }
-.modal-poster {
-    width: 100%;
-    height: 450px;
-    border-radius: 15px;
-    overflow: hidden;
-    background: #18181b;
+
+/* ========= BOTONES DE ACCIÓN MODAL ========= */
+.modal-actions-row {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap; /* permite que bajen de línea si no caben */
     justify-content: center;
-  }
-  .modal-poster img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-    border-radius: 0;
-  }
-  
-
-/* ========================================
-   RESPONSIVE DESIGN
-========================================= */
-
-/* Pantallas grandes (1200px+) - 4 columnas */
-@media (min-width: 1200px) {
-    #movie-list {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 2rem;
-        max-width: 1200px;
-    }
+    gap: 1.3em;
+    margin-top: 1.3em;
+    overflow: visible !important;
 }
 
-/* Pantallas medianas (768px - 1199px) - 3 columnas */
-@media (min-width: 768px) and (max-width: 1199px) {
-    #movie-list {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-        padding: 1.5rem;
-    }
-    
-    .movie-card {
-        height: 380px;
-    }
-    
-    .movie-poster {
-        height: 260px;
-    }
+.modal-action-btn {
+  padding: 0.65em 1.5em;
+  border-radius: 22px;
+  font-family: 'Orbitron', sans-serif;
+  border: none;
+  font-size: 1.05em;
+  cursor: pointer;
+  box-shadow: 0 2px 14px rgba(255, 204, 112, 0.25);
+  background: linear-gradient(45deg, #ffcc70, #ff9a9e 70%);
+  color: #401a49;
+  font-weight: bold;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
 }
 
-/* Pantallas pequeñas tablet (480px - 767px) - 2 columnas */
-@media (min-width: 480px) and (max-width: 767px) {
-    #movie-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-        padding: 1rem;
-    }
-    
-    .movie-card {
-        height: 350px;
-    }
-    
-    .movie-poster {
-        height: 240px;
-    }
-    
-    .movie-card h3 {
-        font-size: 1.1rem;
-    }
-    
-    /* Modal responsive */
-    .modal-content {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .modal-poster {
-        height: 300px;
-        max-width: 200px;
-        margin: 0 auto;
-    }
+.modal-action-btn:hover {
+  background: linear-gradient(45deg, #fc5c65 70%, #ffcc70);
+  color: #fff;
+  transform: scale(1.02);
 }
 
-/* Pantallas muy pequeñas (menos de 480px) - 1 columna */
-@media (max-width: 479px) {
-    #movie-list {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1rem;
-    }
-    
-    .movie-card {
-        height: 380px;
-    }
-    
-    .movie-poster {
-        height: 280px;
-    }
-    
-    .movie-card h3 {
-        font-size: 1rem;
-    }
-    
-    /* Modal móvil */
-    .movie-modal {
-        width: 95%;
-        max-height: 95vh;
-    }
-    
-    .modal-content {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-        gap: 1rem;
-    }
-    
-    .modal-poster {
-        height: 250px;
-        max-width: 180px;
-        margin: 0 auto;
-    }
-    
-    .modal-title {
-        font-size: 1.5rem;
-    }
-    
-    .modal-basic-info {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
-    
-    .trailer-button {
-        width: 100%;
-        padding: 1rem;
-    }
+.modal-delete-confirm {
+  background: linear-gradient(45deg, #fc5c65 70%, #ffcc70);
+  color: #fff !important;
 }
 
-/* Animaciones */
-@keyframes movieCardFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.modal-delete-confirm:hover {
+  background: linear-gradient(45deg, #d7263d 90%, #ffcc70);
+  color: #fff !important;
 }
 
-.movie-card.new-card {
-    animation: movieCardFadeIn 0.6s ease-out;
+/* ========= FORMULARIO DE PELÍCULAS ========= */
+#movie-form-container {
+  text-align: center;
+  margin: 2rem auto;
+  max-width: 600px;
+  padding-bottom: 6rem;
+  z-index: 10;
+  position: relative;
 }
 
-/* Scrollbar personalizada para el modal */
+/* Botón mostrar/ocultar formulario */
+#toggle-form {
+  background-color: #ffcc70;
+  color: #401a49;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  box-shadow: 0 0 10px #ffcc70;
+  transition: background 0.3s ease;
+  z-index: 10;
+  position: relative;
+}
+
+#toggle-form:hover {
+  background-color: #ffc048;
+}
+
+/* Formulario para crear/editar películas */
+#movie-form {
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(6px);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  display: none;
+  text-align: left;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 3rem;
+  z-index: 10;
+  position: relative;
+}
+
+#movie-form.show {
+  display: block;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scaleY(0.95); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
+#movie-form input,
+#movie-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+#movie-form input::placeholder,
+#movie-form textarea::placeholder {
+  color: #eee;
+}
+
+#movie-form button[type="submit"] {
+  background-color: #ffcc70;
+  color: #401a49;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* ========= FOOTER ========= */
+.site-footer {
+  background: linear-gradient(to right, #111, #222);
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 4rem;
+  font-size: 1rem;
+  border-top: 2px solid #ff00ff33;
+  box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.1);
+}
+
+.site-footer p {
+  margin: 0 0 0.5rem 0;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+/* Filas de iconos sociales en footer */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.social-icons a {
+  color: #fff;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.social-icons a:hover {
+  color: #00ffff;
+  transform: scale(1.2);
+}
+
+/* Pie de página fijo (bajo) */
+footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.9rem;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+  font-family: 'Orbitron', sans-serif;
+  border: none;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+footer p {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+}
+
+/* ========= SCROLLBAR PERSONALIZADA ========= */
 .movie-modal::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 .movie-modal::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
 .movie-modal::-webkit-scrollbar-thumb {
-    background: rgba(255, 204, 112, 0.5);
-    border-radius: 10px;
+  background: rgba(255, 204, 112, 0.5);
+  border-radius: 10px;
 }
 
 .movie-modal::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 204, 112, 0.7);
-}
-/* ========================================
-   FORMULARIO DE PELÍCULAS
-========================================= */
-#movie-form-container {
-    text-align: center;
-    margin: 2rem auto;
-    max-width: 600px;
-    padding-bottom: 6rem;
-    z-index: 10;
-    position: relative;
-}
-#toggle-form {
-    background-color: #ffcc70;
-    color: #401a49;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1.1rem;
-    border-radius: 30px;
-    cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    box-shadow: 0 0 10px #ffcc70;
-    transition: background 0.3s ease;
-    z-index: 10;
-    position: relative;
-}
-#toggle-form:hover {
-    background-color: #ffc048;
-}
-#movie-form {
-    margin-top: 1rem;
-    background: rgba(255,255,255,0.07);
-    backdrop-filter: blur(6px);
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
-    display: none;
-    text-align: left;
-    color: white;
-    font-family: 'Orbitron', sans-serif;
-    margin-bottom: 3rem;
-    z-index: 10;
-    position: relative;
-}
-#movie-form input,
-#movie-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    border: none;
-    font-family: inherit;
-    background: rgba(255,255,255,0.1);
-    color: white;
-}
-#movie-form input::placeholder,
-#movie-form textarea::placeholder {
-    color: #eee;
-}
-#movie-form button[type="submit"] {
-    background-color: #ffcc70;
-    color: #401a49;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 20px;
-    font-family: 'Orbitron', sans-serif;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-#movie-form.show {
-    display: block;
-    animation: fadeIn 0.5s ease-in-out;
-}
-@keyframes fadeIn {
-    from {opacity: 0; transform: scaleY(0.95);}
-    to   {opacity: 1; transform: scaleY(1);}
-}
-/* ========================================
-   FOOTER - CENTRADO CORRECTAMENTE
-========================================= */
-footer {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 0.5rem;
-    text-align: center;
-    background: rgba(0,0,0,0.8);
-    color: white;
-    font-size: 0.9rem;
-    z-index: 100;
-    backdrop-filter: blur(4px);
-    font-family: 'Orbitron', sans-serif;
-    border: none;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-}
-footer p {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
+  background: rgba(255, 204, 112, 0.7);
 }
 
-/* ========================================
-   RESPONSIVE DESIGN
-========================================= */
-
-/* 1024px */
-@media (max-width: 1024px) {
-    header {padding-top: 3.5rem;}
-    header h1 {font-size: 2.2rem;}
-    nav {gap: 0.8rem;}
-    nav button {padding: 0.4rem 0.8rem;}
-    .sun-wrapper {width: 180px; height: 90px;}
-    .sun {width: 180px; height: 90px; border-top-left-radius: 90px; border-top-right-radius: 90px;}
-    #movie-list {grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.5rem;}
-    #movie-form-container {max-width: 550px;}
-    #colorChangeBtn {top: 15px; right: 15px; padding: 8px 12px; font-size: 0.85rem; min-width: 110px;}
+/* ========= ANIMACIONES ========= */
+@keyframes movieCardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* 768px */
-@media (max-width: 768px) {
-    header {padding: 1.5rem 1rem; padding-top: 3rem;}
-    header h1 {font-size: 2rem;}
-    header p {font-size: 0.9rem;}
-    nav {gap: 0.5rem; padding: 0.5rem;}
-    nav button {padding: 0.4rem 0.8rem; font-size: 0.85rem;}
-    .sun-wrapper {width: 150px; height: 75px; bottom: 20vh;}
-    .sun {width: 150px; height: 75px; border-top-left-radius: 75px; border-top-right-radius: 75px;}
-    .seagull {width: 2.5rem; height: 2.5rem; animation-duration: 14s;}
-    .ocean {height: 20vh;}
-    #movie-list {grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; padding: 1.5rem;}
-    #movie-form-container {max-width: 90%; padding-bottom: 5rem;}
-    #toggle-form {padding: 0.6rem 1.2rem; font-size: 1rem;}
-    #movie-form {padding: 1.5rem;}
-    footer {font-size: 0.8rem; padding: 0.4rem;}
-    #colorChangeBtn {top: 10px; right: 10px; padding: 6px 10px; font-size: 0.8rem; min-width: 100px;}
+.movie-card.new-card {
+  animation: movieCardFadeIn 0.6s ease-out;
 }
 
-/* 640px */
-@media (max-width: 640px) {
-    header {padding-top: 2.5rem;}
-    header h1 {font-size: 1.8rem;}
-    nav {flex-direction: column; align-items: center; gap: 0.3rem;}
-    nav button {width: 80%; max-width: 200px; padding: 0.5rem;}
-    .sun-wrapper {width: 120px; height: 60px; bottom: 18vh;}
-    .sun {width: 120px; height: 60px; border-top-left-radius: 60px; border-top-right-radius: 60px;}
-    .seagull {width: 2rem; height: 2rem; animation-duration: 16s;}
-    .ocean {height: 18vh;}
-    #movie-list {grid-template-columns: 1fr; gap: 1rem; padding: 1rem;}
-    #movie-form-container {margin: 1rem auto; padding-bottom: 4rem;}
-    #toggle-form {padding: 0.6rem 1rem; font-size: 0.9rem;}
-    #movie-form {padding: 1rem; margin-top: 0.5rem;}
-    #movie-form input, #movie-form textarea {padding: 0.6rem; font-size: 0.9rem;}
-    #movie-form button[type="submit"] {width: 100%; padding: 0.8rem;}
-    #colorChangeBtn {top: 8px; right: 8px; padding: 5px 8px; font-size: 0.75rem; min-width: 90px; border-radius: 25px;}
+/* ========= MODAL RESPONSIVE ========= */
+@media (max-width: 900px) {
+    .modal-content {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+      padding: 1.5rem 1rem !important;
+    }
+    .modal-poster {
+      height: 230px !important;
+      max-width: 97vw;
+      margin: 0 auto 1em auto !important;
+      border-radius: 14px !important;
+    }
+}
+@media (max-width: 650px) {
+    .movie-modal {
+      width: 98vw !important;
+      max-width: 99vw !important;
+      max-height: 97vh !important;
+      border-radius: 12px !important;
+      padding: 0 !important;
+    }
+    .modal-content {
+      grid-template-columns: 1fr !important;
+      gap: 0.7rem !important;
+      padding: 1.1rem 0.4rem !important;
+      min-width: unset !important;
+      min-height: unset !important;
+    }
+    .modal-poster {
+      height: 130px !important;
+      max-width: 98vw !important;
+      border-radius: 10px !important;
+    }
+    .modal-title,
+    .modal-info,
+    .modal-description,
+    #edit-movie-form {
+      max-width: 98vw !important;
+      font-size: 1em !important;
+    }
+    #edit-movie-form input,
+    #edit-movie-form textarea {
+      font-size: 1em !important;
+      padding: 0.5em !important;
+    }
+    .modal-basic-info {
+      grid-template-columns: 1fr !important;
+      gap: 0.34rem !important;
+    }
+}
+@media (max-width: 400px) {
+    .movie-modal {
+      border-radius: 7px !important;
+      padding: 0 !important;
+    }
+    .modal-content {
+      padding: 0.34em 0.09em !important;
+    }
+    .modal-title {
+      font-size: 0.98rem !important;
+    }
+    .modal-poster {
+      height: 70px !important;
+      border-radius: 4px !important;
+    }
 }
 
-/* 480px */
-@media (max-width: 480px) {
-    header {padding: 1rem 0.5rem; padding-top: 2rem;}
-    header h1 {font-size: 1.5rem; margin-bottom: 0.5rem;}
-    header p {font-size: 0.8rem;}
-    nav button {font-size: 0.8rem; padding: 0.4rem 0.8rem;}
-    .sun-wrapper {width: 100px; height: 50px; bottom: 15vh;}
-    .sun {width: 100px; height: 50px; border-top-left-radius: 50px; border-top-right-radius: 50px;}
-    .seagull {width: 1.5rem; height: 1.5rem; animation-duration: 18s;}
-    .ocean {height: 15vh;}
-    #movie-list {padding: 0.8rem;}
-    #movie-form-container {padding-bottom: 3rem;}
-    #toggle-form {padding: 0.5rem 0.8rem; font-size: 0.8rem;}
-    #movie-form {padding: 0.8rem; border-radius: 15px;}
-    #movie-form input, #movie-form textarea {padding: 0.5rem; font-size: 0.8rem; border-radius: 8px;}
-    footer {font-size: 0.7rem; padding: 0.3rem;}
-    #colorChangeBtn {top: 5px; right: 5px; padding: 4px 6px; font-size: 0.7rem; min-width: 80px; border-radius: 20px;}
+/* Inputs y campos del formulario responsivos */
+#edit-movie-form, .modal-info form {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box;
 }
-
-/* 360px */
-@media (max-width: 360px) {
-    header {padding-top: 1.5rem;}
-    header h1 {font-size: 1.3rem;}
-    nav button {width: 90%; font-size: 0.75rem;}
-    .sun-wrapper {width: 80px; height: 40px; bottom: 12vh;}
-    .sun {width: 80px; height: 40px; border-top-left-radius: 40px; border-top-right-radius: 40px;}
-    .seagull {width: 1.2rem; height: 1.2rem; animation-duration: 20s;}
-    .ocean {height: 12vh;}
-    #movie-form-container {padding-bottom: 2rem;}
-    #toggle-form {font-size: 0.75rem;}
-    #movie-form {padding: 0.6rem;}
-    #movie-form input, #movie-form textarea {font-size: 0.75rem;}
-    #colorChangeBtn {top: 3px; right: 3px; padding: 3px 5px; font-size: 0.65rem; min-width: 70px; border-radius: 15px;}
+#edit-movie-form label, .modal-info label {
+  width: 100% !important;
+  display: block;
 }
-
-/* Landscape móviles */
-@media (max-height: 600px) and (orientation: landscape) {
-    header {padding: 1rem; padding-top: 2rem;}
-    header h1 {font-size: 1.8rem; margin-bottom: 0.5rem;}
-    .sun-wrapper {bottom: 10vh;}
-    .ocean {height: 10vh;}
-    .seagull {animation-duration: 10s;}
-    .seagull-1 {top: 10%;}
-    .seagull-2 {top: 15%;}
-    .seagull-3 {top: 20%;}
-    #movie-list {grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; padding: 1rem;}
-    #movie-form-container {padding-bottom: 2rem;}
-    footer {font-size: 0.75rem;}
-    #colorChangeBtn {top: 5px; right: 5px; padding: 4px 8px; font-size: 0.7rem; min-width: 75px;}
-}
-
-/* Pantallas muy altas */
-@media (min-height: 1200px) {
-    header {padding-top: 5rem;}
-    .sun-wrapper {bottom: 30vh;}
-    .ocean {height: 30vh;}
-    .seagull-1 {top: 20%;}
-    .seagull-2 {top: 25%;}
-    .seagull-3 {top: 30%;}
-}
-/* Ultra-anchas */
-@media (min-width: 1920px) {
-    header {padding-top: 6rem;}
-    header h1 {font-size: 3rem;}
-    nav button {padding: 0.6rem 1.2rem; font-size: 1.1rem;}
-    .sun-wrapper {width: 250px; height: 125px;}
-    .sun {width: 250px; height: 125px; border-top-left-radius: 125px; border-top-right-radius: 125px;}
-    .seagull {width: 3.5rem; height: 3.5rem;}
-    #movie-list {grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; padding: 3rem;}
-    #movie-form-container {max-width: 700px;}
-    #toggle-form {font-size: 1.2rem; padding: 0.8rem 1.8rem;}
-    #colorChangeBtn {top: 25px; right: 25px; padding: 12px 18px; font-size: 1rem; min-width: 140px;}
+#edit-movie-form input, #edit-movie-form textarea {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  font-size: 1em;
 }
