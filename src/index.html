@@ -36,7 +36,7 @@
     <div class="seagull seagull-3"></div>
   </div>
 
-  <!-- Formulario (se reutiliza para añadir y editar) -->
+  <!-- Formulario (reutilizado para añadir) -->
   <section id="movie-form-container">
     <button id="toggle-form">➕ Añadir nueva película</button>
     <form id="movie-form" class="hidden">
@@ -44,7 +44,8 @@
       <input type="text" name="director" placeholder="Director" />
       <input type="number" name="release_year" placeholder="Año de estreno" />
       <input type="text" name="genre" placeholder="Género" />
-      <textarea name="movie_description" placeholder="Descripción"></textarea>
+      <textarea name="movie_description" placeholder="Descripción"></textarea>      
+      <input type="text" name="cast" placeholder="Reparto (separa nombres con coma)" />
       <input type="text" name="poster_url" placeholder="URL del póster" />
       <input type="text" name="trailer_url" placeholder="URL del tráiler" />
       <button type="submit">🎬 Guardar película</button>
@@ -68,9 +69,7 @@
       </a>
     </div>
   </footer>
-  
 
   <script type="module" src="main.js"></script>
 </body>
 </html>
-    
