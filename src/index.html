@@ -1,47 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎞Cinde de Verano🌅🌊</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎞Cine de Verano🌅🌊</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <link  rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
 </head>
 <body>
-    <header>
-        <h1>🎬 Cine de Verano</h1>
-        <p>Películas para sentir, pensar... y olvidarnos del calor 😅</p>
-      </header>
-    
-      <nav id="genre-filters">
-        <button data-genre="all">Todos</button>
-        <button data-genre="Drama">Drama</button>
-        <button data-genre="Thriller">Thriller</button>
-        <button data-genre="Science Fiction">Ciencia Ficción</button>
-        <button data-genre="Psychological Thriller">Psicológico</button>
-      </nav>
-    
-      <main>
-        <section id="movie-list">
-          <!-- Aquí se insertarán dinámicamente las películas -->
-        </section>
-      </main>
-    
-      <section id="add-movie">
-        <h2>Añadir nueva película</h2>
-        <form id="movie-form">
-          <input type="text" name="title" placeholder="Título" required />
-          <input type="text" name="director" placeholder="Director" required />
-          <input type="number" name="release_year" placeholder="Año" required />
-          <input type="text" name="genre" placeholder="Género" required />
-          <textarea name="movie_description" placeholder="Descripción" required></textarea>
-          <input type="url" name="poster_url" placeholder="URL del póster" />
-          <input type="url" name="trailer_url" placeholder="URL del tráiler" />
-          <button type="submit">Añadir película</button>
-        </form>
-      </section>
-    
-      <footer>
-        <p>© 2025 Cine de Verano • Proyecto educativo</p>
-      </footer>
-    <script src="services.js"></script>
+  <header>
+    <h1>🎬 Cine de Verano 🌅🌊</h1>
+    <p id="header-desc">Películas para sentir, pensar... y olvidarnos del calor</p>
+    <!-- El botón Cambiar cielo irá aquí (lo agrega JS) -->
+  </header>
+  
+  <!-- Filtros de género -->
+  <nav class="genre-filters" id="genre-filters">
+    <button data-genre="all">Todos</button>
+    <button data-genre="Drama">Drama</button>
+    <button data-genre="Thriller">Thriller</button>
+    <button data-genre="Science Fiction">Ciencia Ficción</button>
+    <button data-genre="Psychological Thriller">Psicológico</button>
+  </nav>
+
+  <div class="background-scene">
+    <div class="sun-wrapper">
+      <div class="sun" id="sun"></div>
+      <div class="sun-reflection"></div>
+    </div>
+    <div class="ocean"></div>
+    <div class="seagull seagull-1"></div>
+    <div class="seagull seagull-2"></div>
+    <div class="seagull seagull-3"></div>
+  </div>
+
+  <!-- Formulario (reutilizado para añadir) -->
+  <section id="movie-form-container">
+    <button id="toggle-form">➕ Añadir nueva película</button>
+    <form id="movie-form" class="hidden">
+      <input type="text" name="title" placeholder="Título de la película" required />
+      <input type="text" name="director" placeholder="Director" />
+      <input type="number" name="release_year" placeholder="Año de estreno" />
+      <input type="text" name="genre" placeholder="Género" />
+      <textarea name="movie_description" placeholder="Descripción"></textarea>      
+      <input type="text" name="cast" placeholder="Reparto (separa nombres con coma)" />
+      <input type="text" name="poster_url" placeholder="URL del póster" />
+      <input type="text" name="trailer_url" placeholder="URL del tráiler" />
+      <button type="submit">🎬 Guardar película</button>
+    </form>
+  </section>
+
+  <main>
+    <section id="movie-list">
+      <!-- Películas cargadas dinámicamente aquí -->
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 Cine de Verano • Proyecto Bootcamp FemCoders FullStakc+DevOps • Realizado por Esther Tapias</p>
+    <div class="social-icons">
+      <a href="https://github.com/EstherTapias" target="_blank" aria-label="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/esther-tapias-paez-camino/" target="_blank" aria-label="LinkedIn">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </div>
+  </footer>
+
+  <script type="module" src="main.js"></script>
 </body>
 </html>
