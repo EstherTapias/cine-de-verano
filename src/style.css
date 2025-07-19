@@ -334,6 +334,29 @@ nav button:hover {
   background: #bbb;                          /* Fondo gris */
   color: #401a49;                            /* Texto violeta */
 }
+.movie-card, .movie-title-under {
+  transition: opacity 0.4s, transform 0.4s;
+}
+.fade-in-movie {
+  opacity: 0;
+  transform: scale(1.10) translateY(30px);
+  animation: fadeInMovie 0.38s cubic-bezier(.21,.77,.43,1.15) forwards;
+}
+@keyframes fadeInMovie {
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.fade-out-movie {
+  opacity: 0 !important;
+  transform: scale(0.97) translateY(35px) !important;
+  pointer-events: none;
+}
+.edit-glow {
+  box-shadow: 0 0 20px #09f99d, 0 2px 10px #fff;
+  transition: box-shadow 0.5s;
+}
 
 /* ========= MODAL OVERLAY ========= */
 .movie-modal-overlay {

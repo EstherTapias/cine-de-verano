@@ -1,124 +1,129 @@
 // Importamos las funciones del servicio que manejan las operaciones CRUD de películas
 import { getMovies, addMovie, editMovie, deleteMovie } from './services.js';
 
-// Variables globales para el estado de la aplicación
-let allMovies = []; // Array que contiene todas las películas
-let currentGenre = "all"; // Género actualmente seleccionado en los filtros
+// Array con todas las películas y el filtro actual
+let allMovies = [];
+let currentGenre = "all";
 
-// Referencias a elementos del DOM que usaremos frecuentemente
+// Referencias a nodos DOM que usamos a menudo
 const movieForm = document.getElementById('movie-form');
 const toggleFormButton = document.getElementById('toggle-form');
 const backgroundScene = document.querySelector('.background-scene');
 
-// Colores para el efecto de cambio de cielo
+// Colores del fondo "cielo"
 const skyColors = ['#ffa17f', '#ff758c', '#8559a5', '#5f0a87'];
 let currentSkyIndex = 0;
 
-// Esperamos a que el DOM esté completamente cargado antes de inicializar la app
+// ---- INICIO DE LA APP ----
 document.addEventListener('DOMContentLoaded', () => {
-  displayMovies(); // Carga y muestra las películas
-  setupGenreFilters(); // Configura los filtros por género
-  initializeApp(); // Inicializa efectos visuales y funcionalidades extras
-  setTimeout(applyMobileAdjustments, 100);
+  displayMovies();                  // Carga y muestra las películas actuales
+  setupGenreFilters();              // Configura los filtros por género
+  initializeApp();                  // Efectos visuales (sky, gaviotas, etc)
+  setTimeout(applyMobileAdjustments, 100); // Ajustes para móviles (delay)
 });
 
-// Función principal para cargar y mostrar todas las películas
+// ---- FUNCIÓN PRINCIPAL: Cargar y mostrar todas ----
 async function displayMovies() {
   try {
     allMovies = await getMovies();
-    renderMovies(getMoviesByActiveGenre());
+    renderAllMovies();
   } catch (error) {
     console.error('Error al cargar las películas:', error);
-    renderMovies([]);
   }
 }
 
-// Actualiza solo la vista sin recargar el array global
-function updateMoviesView() {
-  renderMovies(getMoviesByActiveGenre());
-}
-
-// Añadir una nueva película al array local
-function addMovieToArray(newMovie) {
-  allMovies.push(newMovie);
-}
-
-// Editar una película específica en el array local
-function updateMovieInArray(movieId, updatedData) {
-  const index = allMovies.findIndex(m => m.id === movieId);
-  if (index !== -1) {
-    allMovies[index] = { ...allMovies[index], ...updatedData };
-  }
-}
-
-// Eliminar una película específica del array local
-function removeMovieFromArray(movieId) {
-  allMovies = allMovies.filter(m => m.id !== movieId);
-}
-
-// Filtra las películas según el género actualmente activo
-function getMoviesByActiveGenre() {
-  if (currentGenre === "all") return allMovies;
-  return allMovies.filter(m => {
-    if (!m.genre) return false;
-    const genresArr = m.genre
-      .split(/[,\/;]+/)
-      .map(g => g.trim().toLowerCase());
-    return genresArr.includes(currentGenre.trim().toLowerCase());
-  });
-}
-
-// Configura los event listeners para los botones de filtro por género
-function setupGenreFilters() {
-  const genreButtons = document.querySelectorAll('[data-genre]');
-  genreButtons.forEach(btn => {
-    btn.addEventListener('click', ev => {
-      currentGenre = ev.target.dataset.genre;
-      genreButtons.forEach(b => b.classList.remove('active'));
-      ev.target.classList.add('active');
-      renderMovies(getMoviesByActiveGenre());
-    });
-  });
-}
-
-// Renderiza las películas en el DOM con efectos de transición suaves
-function renderMovies(movies) {
+// ---- Renderizar todas las películas actuales del filtro ----
+function renderAllMovies() {
+  // Solo muestra las películas activas del filtro
+  const movies = getMoviesByActiveGenre();
   const container = document.getElementById('movie-list');
-  container.classList.add('fade-out');
-  setTimeout(() => {
-    container.innerHTML = '';
-    if (!movies.length) {
-      container.innerHTML = '<p>No hay películas disponibles</p>';
-    } else {
-      movies.forEach(movie => {
-        const card = document.createElement('article');
-        card.className = 'movie-card';
-        card.innerHTML = `
-          <div class="movie-poster">
-            <img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img"/>
-          </div>
-        `;
-        const titleAndActions = document.createElement('div');
-        titleAndActions.className = 'movie-title-under';
-        titleAndActions.innerHTML = `
-          <h3>${movie.title}</h3>
-          <div class="movie-actions">
-            <button class="edit-btn" data-id="${movie.id}">✏️ Editar</button>
-            <button class="delete-btn" data-id="${movie.id}">🗑 Eliminar</button>
-          </div>
-        `;
-        container.appendChild(card);
-        container.appendChild(titleAndActions);
-        setupMovieCardEvents(card, titleAndActions, movie);
-      });
+
+  // Si nunca hubo tarjetas, simplemente se agregan
+  if (!container.querySelector('.movie-card')) {
+    movies.forEach(movie => addMovieCardToDOM(movie, container));
+    if (movies.length === 0) container.innerHTML = '<p>No hay películas disponibles</p>';
+    return;
+  }
+
+  // Si ya hay tarjetas, se sincroniza: solo cambia lo que ha cambiado
+  const domIds = Array.from(container.querySelectorAll('.movie-card')).map(c => c.dataset.id);
+
+  // ELIMINA las tarjetas que ya no existen en el array (con transición)
+  domIds.forEach(id => {
+    if (!movies.some(m => String(m.id) === id)) {
+      const card = container.querySelector(`.movie-card[data-id="${id}"]`);
+      const block = card.nextElementSibling; // .movie-title-under (acciones)
+      card.classList.add('fade-out-movie');
+      if (block) block.classList.add('fade-out-movie');
+      setTimeout(() => {
+        card.remove(); if (block) block.remove();
+      }, 400);
     }
-    void container.offsetWidth;
-    container.classList.remove('fade-out');
-  }, 150);
+  });
+
+  // AGREGA nuevas tarjetas no presentes (con transición)
+  movies.forEach(movie => {
+    if (!container.querySelector(`.movie-card[data-id="${movie.id}"]`)) {
+      addMovieCardToDOM(movie, container, true);
+    }
+  });
 }
 
-// Añade los eventos de interacción a cada tarjeta de película
-function setupMovieCardEvents(card, titleAndActions, movie) {
+// ---- Crea en el DOM una tarjeta de película y su bloque de acciones ----
+function addMovieCardToDOM(movie, container = document.getElementById('movie-list'), useFade = false) {
+  const card = document.createElement('article');
+  card.className = 'movie-card';
+  card.dataset.id = movie.id;
+  if (useFade) card.classList.add('fade-in-movie');
+  card.innerHTML = `
+    <div class="movie-poster">
+      <img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img"/>
+    </div>
+  `;
+  // Bloque de título y acciones
+  const titleAndActions = document.createElement('div');
+  titleAndActions.className = 'movie-title-under';
+  if (useFade) titleAndActions.classList.add('fade-in-movie');
+  titleAndActions.innerHTML = `
+    <h3>${movie.title}</h3>
+    <div class="movie-actions">
+      <button class="edit-btn" data-id="${movie.id}">✏️ Editar</button>
+      <button class="delete-btn" data-id="${movie.id}">🗑 Eliminar</button>
+    </div>
+  `;
+  // Añadir ambos bloques al DOM (al final)
+  container.appendChild(card);
+  container.appendChild(titleAndActions);
+  setTimeout(() => {
+    card.classList.remove('fade-in-movie');
+    titleAndActions.classList.remove('fade-in-movie');
+  }, 400);
+  // Efectos y botones
+  addCardEvents(card, titleAndActions, movie);
+}
+
+// ---- Altera solo esta tarjeta si se edita (transición local) ----
+function updateMovieCardInDOM(movie) {
+  // Busca la tarjeta y la actualiza in-place
+  const card = document.querySelector(`.movie-card[data-id="${movie.id}"]`);
+  if (card) {
+    const img = card.querySelector('img.movie-poster-img');
+    if (img) {
+      img.src = movie.poster_url;
+      img.alt = 'Póster de ' + movie.title;
+    }
+    const actions = card.nextElementSibling;
+    if (actions && actions.classList.contains('movie-title-under')) {
+      actions.querySelector('h3').textContent = movie.title;
+    }
+    // Efecto resaltado al editar
+    card.classList.add('edit-glow');
+    setTimeout(() => card.classList.remove('edit-glow'), 650);
+  }
+}
+
+// ---- Añade listeners a una tarjeta concreta ----
+function addCardEvents(card, titleAndActions, movie) {
   card.addEventListener('mouseenter', () => {
     card.style.boxShadow = '0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(138,43,226,0.6)';
     card.style.transform = 'translateY(-5px) scale(1.02)';
@@ -128,45 +133,46 @@ function setupMovieCardEvents(card, titleAndActions, movie) {
     card.style.transform = 'translateY(0) scale(1)';
   });
   card.addEventListener('click', () => openMovieModal(movie));
+  // Botón editar
   titleAndActions.querySelector('.edit-btn').addEventListener('click', e => {
     e.stopPropagation();
     openEditMovieModal(movie);
   });
+  // Botón eliminar
   titleAndActions.querySelector('.delete-btn').addEventListener('click', e => {
     e.stopPropagation();
     openDeleteModal(movie);
   });
 }
 
-// Muestra el modal de detalle de la película
+// ------- FILTRO ACTIVO -------
+function getMoviesByActiveGenre() {
+  if (currentGenre === "all") return allMovies;
+  return allMovies.filter(m => {
+    if (!m.genre) return false;
+    const genresArr = m.genre.split(/[,\/;]+/).map(g => g.trim().toLowerCase());
+    return genresArr.includes(currentGenre.trim().toLowerCase());
+  });
+}
+
+// ------- Detalle de película en modal, muestra reparto ------
 function openMovieModal(movie) {
   removeAllModals();
   showModalHTML(`
     <div class="modal-content">
-      <div class="movie-poster">
-        <img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img">
-      </div>
+      <div class="movie-poster"><img src="${movie.poster_url}" alt="Póster de ${movie.title}" class="movie-poster-img"></div>
       <div class="movie-info">
         <h2 class="modal-title">${movie.title}</h2>
         <div class="modal-basic-info">
           <div class="info-item"><span class="info-label">Director</span><div class="info-value">${movie.director || 'Desconocido'}</div></div>
           <div class="info-item"><span class="info-label">Año</span><div class="info-value">${movie.release_year || 'N/A'}</div></div>
           <div class="info-item"><span class="info-label">Género</span><div class="info-value">${movie.genre || 'N/A'}</div></div>
-          <div class="info-item"><span class="info-label">Duración</span><div class="info-value">${movie.duration ? movie.duration + " min" : 'N/A'}</div></div>
-          <div class="info-item"><span class="info-label">Puntuación</span><div class="info-value">${movie.rating ? movie.rating + '/10' : 'N/A'}</div></div>
-          <div class="info-item"><span class="info-label">Idioma</span><div class="info-value">${movie.language || 'N/A'}</div></div>
-          <div class="info-item"><span class="info-label">País</span><div class="info-value">${movie.country || 'N/A'}</div></div>
         </div>
-        ${
-          Array.isArray(movie.cast) && movie.cast.length 
-            ? `<div class="modal-cast">
-                <div class="cast-title">Reparto:</div>
-                <div class="cast-list">
-                  ${movie.cast.map(actor => `<span class="cast-member">${actor}</span>`).join('')}
-                </div>
-              </div>`
-            : ''
-        }
+        <!-- Sección cast -->
+        ${(Array.isArray(movie.cast) && movie.cast.length)
+          ? `<div class="modal-cast"><div class="cast-title">Reparto:</div>
+                <div class="cast-list">${movie.cast.map(actor => `<span class="cast-member">${actor}</span>`).join('')}</div>
+             </div>` : ''}
         <div class="modal-description">${movie.movie_description || ''}</div>
         ${movie.trailer_url ? `<a href="${movie.trailer_url}" target="_blank" rel="noopener" class="trailer-button">🎬 Ver tráiler</a>` : ''}
       </div>
@@ -174,7 +180,7 @@ function openMovieModal(movie) {
   `);
 }
 
-// Muestra el modal para editar una película existente
+// ------- MODAL DE EDICIÓN, con reparto/cast ------
 function openEditMovieModal(movie) {
   removeAllModals();
   showModalHTML(`
@@ -197,18 +203,18 @@ function openEditMovieModal(movie) {
           <label><span class="info-label">Género</span>
             <input type="text" name="genre" value="${movie.genre || ''}"/>
           </label>
-          <label><span class="info-label">Descripción</span>
-            <textarea name="movie_description">${movie.movie_description || ''}</textarea>
-          </label>
-          <!-- CAMPO PARA EL REPARTO -->
+          <!-- Nuevo campo -->
           <label><span class="info-label">Reparto (separa por comas)</span>
-            <input type="text" name="cast" value="${Array.isArray(movie.cast) ? movie.cast.join(', ') : ''}" placeholder="Ej: Ana Torrent, Fele Martínez, Eduardo Noriega"/>
+            <input type="text" name="cast" value="${Array.isArray(movie.cast) ? movie.cast.join(', ') : ''}" placeholder="Ej: Ana Torrent, Fele Martínez, Eduardo Noriega" />
           </label>
           <label><span class="info-label">URL del póster</span>
             <input type="text" name="poster_url" value="${movie.poster_url || ''}"/>
           </label>
           <label><span class="info-label">URL del tráiler</span>
             <input type="text" name="trailer_url" value="${movie.trailer_url || ''}"/>
+          </label>
+          <label><span class="info-label">Descripción</span>
+            <textarea name="movie_description">${movie.movie_description || ''}</textarea>
           </label>
           <div class="modal-actions-row">
             <button type="submit" class="save-btn-modal modal-action-btn">💾 Guardar cambios</button>
@@ -219,7 +225,6 @@ function openEditMovieModal(movie) {
       </div>
     </div>
   `);
-
   document.getElementById('edit-movie-form').onsubmit = async function(ev) {
     ev.preventDefault();
     const form = ev.target;
@@ -228,20 +233,16 @@ function openEditMovieModal(movie) {
       director: form.director.value,
       release_year: form.release_year.value,
       genre: form.genre.value,
-      movie_description: form.movie_description.value,
+      cast: form.cast.value ? form.cast.value.split(',').map(x => x.trim()).filter(Boolean) : [],
       poster_url: form.poster_url.value,
       trailer_url: form.trailer_url.value,
-      // Nuevo: obtener cast como array de actores
-      cast: form.cast.value
-        ? form.cast.value.split(',').map(x => x.trim()).filter(Boolean)
-        : []
+      movie_description: form.movie_description.value
     };
     try {
       await editMovie(movie.id, updated);
       updateMovieInArray(movie.id, updated);
+      updateMovieCardInDOM({ ...movie, ...updated });
       removeEditModal();
-      updateMoviesView();
-      console.log('Película modificada exitosamente:', updated.title);
     } catch (error) {
       console.error('Error al modificar la película:', error);
     }
@@ -253,7 +254,7 @@ function openEditMovieModal(movie) {
   document.querySelector('.cancel-edit-modal').onclick = removeEditModal;
 }
 
-// Elimina una película (modal de confirmación)
+// ---- Modal de confirmación ----
 function openDeleteModal(movie) {
   removeAllModals();
   showModalHTML(`
@@ -279,16 +280,27 @@ function openDeleteModal(movie) {
     try {
       await deleteMovie(movie.id);
       removeMovieFromArray(movie.id);
-      removeAllModals();
-      updateMoviesView();
-      console.log('Película eliminada exitosamente:', movie.title);
+      // Elimina la tarjeta directamente con fade-out
+      const card = document.querySelector(`.movie-card[data-id="${movie.id}"]`);
+      const ta = card ? card.nextElementSibling : null;
+      if (card) {
+        card.classList.add('fade-out-movie');
+        if (ta && ta.classList.contains('movie-title-under')) ta.classList.add('fade-out-movie');
+        setTimeout(() => {
+          if (ta) ta.remove();
+          card.remove();
+          removeAllModals();
+        }, 400);
+      } else {
+        removeAllModals();
+      }
     } catch (error) {
       console.error('Error al eliminar la película:', error);
     }
   };
 }
 
-// Función para mostrar el modal (overlay) con contenido HTML
+// ------ Utilidad: muestra/modifica modal con overlay
 function showModalHTML(contentHTML) {
   removeAllModals();
   const overlay = document.createElement('div');
@@ -301,47 +313,70 @@ function showModalHTML(contentHTML) {
   `;
   document.body.appendChild(overlay);
   setTimeout(() => overlay.classList.add('show'), 10);
-
-  // Esquema para cerrar modales
-  function closeModal() { overlay.remove(); }
-  overlay.querySelector('.modal-close').onclick = closeModal;
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  overlay.querySelector('.modal-close').onclick = () => overlay.remove();
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   document.addEventListener('keydown', function escListener(e) {
     if (e.key === 'Escape') {
-      closeModal();
+      overlay.remove();
       document.removeEventListener('keydown', escListener);
     }
   });
 }
-
-// Función para cerrar y remover todos los modales activos
+function removeEditModal() { removeAllModals(); }
 function removeAllModals() {
   document.querySelectorAll('.movie-modal-overlay').forEach(m => m.remove());
 }
 
 // ========== FORMULARIO PARA NUEVA PELÍCULA ==========
-
+// Botón mostrar/ocultar el formulario
 if (toggleFormButton) {
   toggleFormButton.addEventListener('click', toggleMovieForm);
 }
-
 function toggleMovieForm() {
   movieForm.classList.toggle('show');
   toggleFormButton.textContent = movieForm.classList.contains('show')
     ? '❌ Cerrar formulario'
     : '➕ Añadir nueva película';
 }
+// Añadir nueva película desde el formulario principal (campo reparto incluído)
+if (movieForm) {
+  movieForm.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const formData = new FormData(movieForm);
+    const movieData = {
+      title: formData.get('title'),
+      director: formData.get('director'),
+      release_year: formData.get('release_year'),
+      genre: formData.get('genre'),
+      cast: formData.get('cast') ? formData.get('cast').split(',').map(x => x.trim()).filter(Boolean) : [],
+      poster_url: formData.get('poster_url'),
+      trailer_url: formData.get('trailer_url'),
+      movie_description: formData.get('movie_description')
+    };
+    if (!movieData.title || !movieData.title.trim()) {
+      console.warn('Error: Se requiere un título para la película');
+      return;
+    }
+    try {
+      const newMovie = await addMovie(movieData);
+      addMovieToArray(newMovie || { ...movieData, id: Date.now() });
+      addMovieCardToDOM(newMovie || { ...movieData, id: Date.now() });
+      movieForm.reset();
+      movieForm.classList.remove('show');
+      toggleFormButton.textContent = '➕ Añadir nueva película';
+    } catch (error) {
+      console.error('Error al añadir la película:', error);
+    }
+  });
+}
 
-// ========= FUNCIONALIDADES VISUALES Y EFECTOS Y MOBILE =========
-
-// Cambia el color del cielo
+// ========== EFECTOS VISUALES Y SKY BUTTON Y MOBILE ==========
+// (igual que antes)
 function changeSkyColor() {
   currentSkyIndex = (currentSkyIndex + 1) % skyColors.length;
   const newGradient = `linear-gradient(to bottom, ${skyColors[currentSkyIndex]}, #845ec2)`;
   if (backgroundScene) backgroundScene.style.background = newGradient;
 }
-
-// Botón de cielo
 function createSkyToggleButton() {
   if (document.getElementById('sky-toggle-btn')) return;
   const skyToggleButton = document.createElement('button');
@@ -352,7 +387,6 @@ function createSkyToggleButton() {
   const desc = document.getElementById('header-desc');
   if (desc && desc.parentNode) desc.parentNode.insertBefore(skyToggleButton, desc.nextSibling);
 }
-
 function addParallaxEffect() {
   const sun = document.getElementById('sun');
   window.addEventListener('scroll', () => {
@@ -360,7 +394,6 @@ function addParallaxEffect() {
     if (sun) sun.style.transform = `translateY(${scrolled * 0.5}px)`;
   });
 }
-
 function addSeagullHoverEffect() {
   document.querySelectorAll('.seagull').forEach(seagull => {
     seagull.addEventListener('mouseenter', () => {
@@ -373,18 +406,15 @@ function addSeagullHoverEffect() {
     });
   });
 }
-
 function initializeApp() {
   createSkyToggleButton();
   addParallaxEffect();
   addSeagullHoverEffect();
   console.log('🎬 Cine de Verano inicializado correctamente');
 }
-
 function isMobileDevice() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
-
 function applyMobileAdjustments() {
   if (isMobileDevice()) {
     document.querySelectorAll('.seagull').forEach(seagull => {
@@ -398,3 +428,30 @@ function applyMobileAdjustments() {
     console.log('Ajustes para móviles aplicados');
   }
 }
+
+/* 
+======= AGREGA ESTO A TU CSS PARA SUAVIDAD =======
+.movie-card, .movie-title-under {
+  transition: opacity 0.4s, transform 0.4s;
+}
+.fade-in-movie {
+  opacity: 0;
+  transform: scale(1.10) translateY(30px);
+  animation: fadeInMovie 0.38s cubic-bezier(.21,.77,.43,1.15) forwards;
+}
+@keyframes fadeInMovie {
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.fade-out-movie {
+  opacity: 0 !important;
+  transform: scale(0.97) translateY(35px) !important;
+  pointer-events: none;
+}
+.edit-glow {
+  box-shadow: 0 0 20px #09f99d, 0 2px 10px #fff;
+  transition: box-shadow 0.5s;
+}
+*/
