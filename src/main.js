@@ -14,11 +14,19 @@ const backgroundScene = document.querySelector('.background-scene');  // Element
 const skyColors = ['#ffa17f', '#ff758c', '#8559a5', '#5f0a87'];
 let currentSkyIndex = 0;           // Índice actual del color del cielo
 
+// ========== INICIALIZACIÓN CON VALIDACIONES ==========
 // Esperamos a que el DOM esté completamente cargado antes de inicializar la app
 document.addEventListener('DOMContentLoaded', () => {
   displayMovies();         // Carga y muestra las películas al iniciar
   setupGenreFilters();     // Prepara filtros por género
   initializeApp();         // Inicializa efectos visuales
+  
+  // NUEVO: Inicializar validaciones en tiempo real
+  if (window.MovieValidations) {
+    window.MovieValidations.initializeFormValidations();
+    console.log('✅ Validaciones inicializadas correctamente');
+  }
+  
   setTimeout(applyMobileAdjustments, 100);   // Ajustes móviles tras pequeño delay
 });
 
@@ -165,6 +173,7 @@ function openMovieModal(movie) {
   `);
 }
 
+// ========== MODAL EDICIÓN CON VALIDACIONES ==========
 // Modal edición con campo cast para modificar reparto
 function openEditMovieModal(movie) {
   removeAllModals(); // Cierra modales
@@ -210,10 +219,30 @@ function openEditMovieModal(movie) {
     </div>
   `);
 
-  // Evento submit edición
+  // ========== EVENTO SUBMIT CON VALIDACIONES PARA EDICIÓN ==========
   document.getElementById('edit-movie-form').onsubmit = async function(ev) {
     ev.preventDefault();
     const form = ev.target;
+    const formData = new FormData(form);
+    
+    // NUEVO: Validar formulario de edición antes de procesar
+    if (window.MovieValidations) {
+      window.MovieValidations.clearFormErrors(form);
+      const validation = window.MovieValidations.validateMovieForm(formData, true); // true = isEditing
+      
+      if (!validation.isValid) {
+        // Mostrar errores en el formulario
+        Object.keys(validation.errors).forEach(fieldName => {
+          window.MovieValidations.showFieldError(fieldName, validation.errors[fieldName]);
+        });
+        
+        console.warn('❌ Formulario de edición contiene errores:', validation.errors);
+        alert('Por favor, corrige los errores en el formulario antes de guardar los cambios.');
+        return; // No continuar con el envío
+      }
+    }
+    
+    // Continúa con la lógica original de edición...
     const updated = {
       title: form.title.value,
       director: form.director.value,
@@ -225,14 +254,16 @@ function openEditMovieModal(movie) {
       trailer_url: form.trailer_url.value,
       movie_description: form.movie_description.value
     };
+    
     try {
       await editMovie(movie.id, updated);
       updateMovieInArray(movie.id, updated); // Actualiza localmente
       removeEditModal(); // Cierra modal
       updateMoviesView(); // Refresca lista en pantalla
-      console.log('Película modificada exitosamente:', updated.title);
+      console.log('✅ Película modificada exitosamente:', updated.title);
     } catch (error) {
       console.error('Error al modificar la película:', error);
+      alert('Error al guardar los cambios. Por favor, inténtalo de nuevo.');
     }
   };
 
@@ -244,6 +275,46 @@ function openEditMovieModal(movie) {
 
   // Botón cancelar en modal edición
   document.querySelector('.cancel-edit-modal').onclick = removeEditModal;
+  
+  // NUEVO: Aplicar validaciones en tiempo real al modal de edición
+  if (window.MovieValidations) {
+    // Añadir validaciones en tiempo real específicamente para los campos del modal
+    const form = document.getElementById('edit-movie-form');
+    const fields = ['title', 'director', 'release_year', 'genre', 'cast', 'poster_url', 'trailer_url'];
+    
+    fields.forEach(fieldName => {
+      const field = form.querySelector(`[name="${fieldName}"]`);
+      if (field) {
+        // Validación al salir del campo (blur)
+        field.addEventListener('blur', function() {
+          let validation;
+          
+          if (fieldName === 'release_year') {
+            validation = window.MovieValidations.validateYear ? 
+              window.MovieValidations.validateYear(this.value) : 
+              { isValid: true };
+          } else if (fieldName === 'poster_url' || fieldName === 'trailer_url') {
+            validation = window.MovieValidations.validateURL ? 
+              window.MovieValidations.validateURL(this.value, fieldName) : 
+              { isValid: true };
+          } else {
+            validation = window.MovieValidations.validateField ? 
+              window.MovieValidations.validateField(fieldName, this.value, fieldName === 'title') :
+              { isValid: true };
+          }
+          
+          window.MovieValidations.showFieldError(fieldName, validation.isValid ? '' : validation.message);
+        });
+        
+        // Limpiar error al escribir (input)
+        field.addEventListener('input', function() {
+          if (this.style.borderColor === 'rgb(231, 76, 60)') { // Si tiene error
+            window.MovieValidations.showFieldError(fieldName, ''); // Limpiar error
+          }
+        });
+      }
+    });
+  }
 }
 
 // Modal confirmación eliminar
@@ -333,11 +404,33 @@ function toggleMovieForm() {
     : '➕ Añadir nueva película';
 }
 
-// Evento submit formulario nueva película con reparto
+// ========== FORMULARIO PRINCIPAL CON VALIDACIONES ==========
+// NUEVO: Evento submit formulario nueva película con validaciones y reparto
 if (movieForm) {
   movieForm.addEventListener('submit', async function(event) {
     event.preventDefault();
     const formData = new FormData(movieForm);
+    
+    // NUEVO: Validar formulario antes de procesar
+    if (window.MovieValidations) {
+      window.MovieValidations.clearFormErrors(movieForm);
+      const validation = window.MovieValidations.validateMovieForm(formData);
+      
+      if (!validation.isValid) {
+        // Mostrar errores en el formulario
+        Object.keys(validation.errors).forEach(fieldName => {
+          window.MovieValidations.showFieldError(fieldName, validation.errors[fieldName]);
+        });
+        
+        console.warn('❌ Formulario contiene errores:', validation.errors);
+        
+        // Mostrar alerta amigable al usuario
+        alert('Por favor, corrige los errores en el formulario antes de continuar.');
+        return; // No continuar con el envío
+      }
+    }
+    
+    // Continúa con la lógica original...
     const movieData = {
       title: formData.get('title'),
       director: formData.get('director'),
@@ -349,19 +442,34 @@ if (movieForm) {
       trailer_url: formData.get('trailer_url'),
       movie_description: formData.get('movie_description')
     };
+    
     if (!movieData.title || !movieData.title.trim()) {
       console.warn('Error: Se requiere un título para la película');
       return;
     }
+    
     try {
+      // Solo llamamos a addMovie y esperamos su resultado
       const newMovie = await addMovie(movieData);
-      addMovieToArray(newMovie || { ...movieData, id: Date.now() });
-      movieForm.reset();
-      movieForm.classList.remove('show');
-      toggleFormButton.textContent = '➕ Añadir nueva película';
-      updateMoviesView();
+      
+      // Solo si la petición fue exitosa, añadimos al array local
+      if (newMovie) {
+        addMovieToArray(newMovie);
+        movieForm.reset();
+        movieForm.classList.remove('show');
+        toggleFormButton.textContent = '➕ Añadir nueva película';
+        updateMoviesView();
+        console.log('✅ Película añadida exitosamente:', newMovie.title);
+        
+        // NUEVO: Limpiar errores tras éxito
+        if (window.MovieValidations) {
+          window.MovieValidations.clearFormErrors(movieForm);
+        }
+      }
     } catch (error) {
       console.error('Error al añadir la película:', error);
+      // Opcional: mostrar mensaje de error al usuario
+      alert('Error al guardar la película. Por favor, inténtalo de nuevo.');
     }
   });
 }
