@@ -333,7 +333,7 @@ function toggleMovieForm() {
     : '➕ Añadir nueva película';
 }
 
-// Evento submit formulario nueva película con reparto
+// AQUÍ ESTÁ EL FIX PRINCIPAL: Evento submit formulario nueva película con reparto
 if (movieForm) {
   movieForm.addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -349,19 +349,29 @@ if (movieForm) {
       trailer_url: formData.get('trailer_url'),
       movie_description: formData.get('movie_description')
     };
+    
     if (!movieData.title || !movieData.title.trim()) {
       console.warn('Error: Se requiere un título para la película');
       return;
     }
+    
     try {
+      // FIX: Solo llamamos a addMovie y esperamos su resultado
       const newMovie = await addMovie(movieData);
-      addMovieToArray(newMovie || { ...movieData, id: Date.now() });
-      movieForm.reset();
-      movieForm.classList.remove('show');
-      toggleFormButton.textContent = '➕ Añadir nueva película';
-      updateMoviesView();
+      
+      // Solo si la petición fue exitosa, añadimos al array local
+      if (newMovie) {
+        addMovieToArray(newMovie);
+        movieForm.reset();
+        movieForm.classList.remove('show');
+        toggleFormButton.textContent = '➕ Añadir nueva película';
+        updateMoviesView();
+        console.log('Película añadida exitosamente:', newMovie.title);
+      }
     } catch (error) {
       console.error('Error al añadir la película:', error);
+      // Opcional: mostrar mensaje de error al usuario
+      alert('Error al guardar la película. Por favor, inténtalo de nuevo.');
     }
   });
 }
